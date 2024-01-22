@@ -8,7 +8,7 @@ WORKDIR /var/www/html
 COPY . /var/www/html/
 
 # Installer les dépendances (si nécessaire)
-RUN composer install
+RUN apt-get update
 
 # Exposer le port sur lequel le serveur web Apache écoute
 EXPOSE 80
