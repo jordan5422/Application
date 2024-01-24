@@ -32,8 +32,9 @@ if (!filter_var($postData['email'], FILTER_VALIDATE_EMAIL)) {
              $postData['email'],
              strip_tags($postData['password'])
          );
+     }else{
+        redirectToUrl('home.php');
      }
 }
-
-redirectToUrl('home.php');
+redirectToUrl('login.php');
 }

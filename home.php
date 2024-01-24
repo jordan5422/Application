@@ -1,11 +1,12 @@
-<!-- inclusion des variables et fonctions -->
 <?php
 session_start();
 require_once(__DIR__ . '/configuration/mysql.php');
 require_once(__DIR__ . '/databaseconnect.php');
 require_once(__DIR__ . '/variables.php');
 require_once(__DIR__ . '/functions.php');
+require_once(__DIR__ . '/isConnect.php');
 ?>
+<!-- inclusion des variables et fonctions -->
 
 <!DOCTYPE html>
 <html>
@@ -26,7 +27,7 @@ require_once(__DIR__ . '/functions.php');
         <h1>Site de recettes</h1>
 
         <!-- Formulaire de connexion -->
-        <?php require_once(__DIR__ . '/index.php'); ?>
+        <?php require_once(__DIR__ . '/content.php'); ?>
     </div>
 
     <!-- inclusion du bas de page du site -->
