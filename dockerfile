@@ -1,14 +1,24 @@
-# Utiliser une image de PHP avec Apache
-FROM php:8.2.12-apache
+# Utiliser l'image PHP avec Apache
+FROM php:apache
 
-# Définir le répertoire de travail dans le conteneur
-WORKDIR /var/www/html
+# Installer des extensions PHP
+RUN docker-php-ext-install pdo pdo_mysql
 
-# Copier les fichiers locaux dans le conteneur
-COPY . /var/www/html/
+# Installer Node.js
+RUN apt-get update && apt-get install -y gnupg
+RUN curl -sL https://deb.nodesource.com/setup_14.x | bash -
+RUN apt-get install -y nodejs
 
-# Installer les dépendances (si nécessaire)
-RUN apt-get update
+# Installer les dépendances nécessaires pour générer une clé SSH
+RUN apt-get update && apt-get install -y openssh-client
 
-# Exposer le port sur lequel le serveur web Apache écoute
+# Générer une clé SSH (remplacer 'your_email@example.com' par votre email)
+RUN ssh-keygen -t rsa -b 4096 -C "tatuefom@3il.fr" -f /root/.ssh/id_rsa -N ''
+RUN eval "$(ssh-agent -s)" ssh-add ~/.ssh/id_rsa
+
+# Copier les fichiers de l'application dans le conteneur
+COPY . /var/www/html
+
+# Donner les permissions appropriées
+RUN chown -R www-data:www-data /var/www/html
 EXPOSE 80
