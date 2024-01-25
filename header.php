@@ -1,4 +1,4 @@
-<nav class="navbar navbar-expand-lg navbar-ligth bg-dark">
+<nav class="navbar navbar-expand-lg navbar-ligth bg-ligth">
   <div class="container-fluid">
     <a class="navbar-brand" href="home.php"><i class="fa-sharp fa-solid fa-house"></i></a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -25,7 +25,7 @@
       </ul>
       <form class="d-flex">
         <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-        <button class="btn btn-outline-success" type="submit">Search</button>
+        <button class="btn btn-outline-dark" type="submit">Search</button>
       </form>
     </div>
   </div>
