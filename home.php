@@ -1,10 +1,10 @@
 <?php
 session_start();
 require_once(__DIR__ . '/configuration/mysql.php');
-require_once(__DIR__ . '/databaseconnect.php');
-require_once(__DIR__ . '/variables.php');
-require_once(__DIR__ . '/functions.php');
-require_once(__DIR__ . '/isConnect.php');
+require_once(__DIR__ . '/configuration/databaseconnect.php');
+require_once(__DIR__ . '/variables/variables.php');
+require_once(__DIR__ . '/variables/functions.php');
+require_once(__DIR__ . '/application/isConnect.php');
 ?>
 <!-- inclusion des variables et fonctions -->
 
@@ -23,15 +23,15 @@ require_once(__DIR__ . '/isConnect.php');
 <body class="d-flex flex-column min-vh-100">
     <div class="container">
         <!-- inclusion de l'entête du site -->
-        <?php require_once(__DIR__ . '/header.php'); ?>
+        <?php require_once(__DIR__ . '/base/header.php'); ?>
         <h1>Site de recettes</h1>
 
         <!-- Formulaire de connexion -->
-        <?php require_once(__DIR__ . '/content.php'); ?>
+        <?php require_once(__DIR__ . '/application/content.php'); ?>
     </div>
 
     <!-- inclusion du bas de page du site -->
-    <?php require_once(__DIR__ . '/footer.php'); ?>
+    <?php require_once(__DIR__ . '/base/footer.php'); ?>
 </body>
 
 </html>

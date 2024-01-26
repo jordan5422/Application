@@ -1,9 +1,9 @@
 <?php
 session_start();
-require_once(__DIR__ . '/configuration/mysql.php');
-require_once(__DIR__ . '/databaseconnect.php');
-require_once(__DIR__ . '/variables.php');
-require_once(__DIR__ . '/functions.php');
+require_once(__DIR__ . '/../configuration/databaseconnect.php');
+require_once(__DIR__ . '/../configuration/databaseconnect.php');
+require_once(__DIR__ . '/../variables/variables.php');
+require_once(__DIR__ . '/../variables/functions.php');
 ?>
 <!--
    Si utilisateur/trice est non identifié(e), on affiche le formulaire
@@ -21,18 +21,18 @@ require_once(__DIR__ . '/functions.php');
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Site de recettes - Page d'accueil</title>
     <!-- <link rel="stylesheet" href="style.css"> -->
-    <link rel="stylesheet" href="login.css">
+    <link rel="stylesheet" href="static/login.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous" />
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js" integrity="sha384-BBtl+eGJRgqQAUMxJ7pMwbEyER4l1g+O15P+16Ep7Q9Q+zqX6gSbd85u4mG4QzX+" crossorigin="anonymous"></script>
 </head>
 
 <body>
-    <section class="container">
+    <section class="container main_sec">
         <div class="main">
             <div class="navbar row">
                 <?php
-                require_once(__DIR__ . '/header.php');
+                require_once(__DIR__ . '/../base/header.php');
                 ?>
             </div>
             <br>
@@ -95,7 +95,7 @@ require_once(__DIR__ . '/functions.php');
         </div>
     </section>
     <?php
-    require_once(__DIR__ . '/footer.php');
+    require_once(__DIR__ . '/../base/footer.php');
     ?>
     <script src="https://unpkg.com/ionicons@5.4.0/dist/ionicons.js">
         (function(doc) {
