@@ -28,10 +28,11 @@ require_once(__DIR__ . '/application/isConnect.php');
 
         <!-- Formulaire de connexion -->
         <?php require_once(__DIR__ . '/application/content.php'); ?>
-    </div>
 
-    <!-- inclusion du bas de page du site -->
-    <?php require_once(__DIR__ . '/base/footer.php'); ?>
+
+        <!-- inclusion du bas de page du site -->
+        <?php require_once(__DIR__ . '/base/footer.php'); ?>
+    </div>
 </body>
 
 </html>
