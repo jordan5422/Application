@@ -1,7 +1,7 @@
 <!-- inclusion des variables et fonctions -->
 <?php
-require_once(__DIR__ . '/variables.php');
-require_once(__DIR__ . '/functions.php');
+require_once(__DIR__ . '/../variables/variables.php');
+require_once(__DIR__ . '/../variables/functions.php');
 ?>
 <?php foreach (getRecipes($recipes) as $recipe) : ?>
     <article>

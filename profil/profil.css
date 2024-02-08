@@ -1,0 +1,19 @@
+body, html {
+    margin: 0; /* Correction : Remplacer 100 par 0 */
+    padding: 0; /* Correction : Remplacer 100 par 0 */
+    height: 100%;
+}
+
+.content {
+    display: flex;
+    justify-content: center;
+    align-items: center; /* Correction : Remplacer start par center */
+    height: 100vh; /* Correction : Ajuster à 100vh pour une hauteur pleine écran */
+    border-radius: 30px;
+    overflow: hidden;
+}
+
+img {
+    max-width: 100%; /* Correction : Ajuster à 100% pour la largeur de l'écran */
+    height: auto; /* Correction : Garder le ratio de l'image */
+}
