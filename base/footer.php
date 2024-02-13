@@ -1,10 +1,15 @@
-<section class="container footer">
-  <footer class="bg-light text-center text-lg-start mt-auto ">
-    <div class="text-center p-3">
+<section class="container">
+  <footer class="page-footer">
+    <p>
+      &copy; <span id="date"></span>
+      <span class="footer-logo">SimplyRecipes</span> Built by
+      <div class="text-center p-3">
       © 2024 Copyright:
-      <a class="text-dark" href="">jordan</a>
+      <a class="text-dark" href="">jet 3</a>
     </div>
+    </p>
   </footer>
+  <script src="../final/js/app.js"></script>
 </section>
 
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>

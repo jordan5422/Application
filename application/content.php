@@ -1,18 +1,41 @@
 <!-- inclusion des variables et fonctions -->
 <?php
-require_once(__DIR__ . '/variables.php');
-require_once(__DIR__ . '/functions.php');
+require_once(__DIR__ . '/../variables/variables.php');
+require_once(__DIR__ . '/../variables/functions.php');
 ?>
-<?php foreach (getRecipes($recipes) as $recipe) : ?>
-    <article>
-        <h3><a href="recipes_read.php?id=<?php echo ($recipe['recipe_id']); ?>"><?php echo ($recipe['title']); ?></a></h3>
-        <div><?php echo $recipe['recipe']; ?></div>
-        <i><?php echo displayAuthor($recipe['author'], $users); ?></i>
-        <?php if (isset($_SESSION['LOGGED_USER']) && $recipe['author'] === $_SESSION['LOGGED_USER']['email']) : ?>
-            <ul class="list-group list-group-horizontal">
-                <li class="list-group-item"><a class="link-warning" href="recipes_update.php?id=<?php echo ($recipe['recipe_id']); ?>">Editer l'article</a></li>
-                <li class="list-group-item"><a class="link-danger" href="recipes_delete.php?id=<?php echo ($recipe['recipe_id']); ?>">Supprimer l'article</a></li>
-            </ul>
-        <?php endif; ?>
-    </article>
-<?php endforeach ?>
+
+
+<header class="hero">
+    <div class="hero-container">
+        <div class="hero-text">
+            <h1>simply recipes</h1>
+            <h4>no fluff, just recipes</h4>
+        </div>
+    </div>
+</header>
+
+
+<section class="recipes-container">
+    <!-- tag container -->
+    <div class="tags-container">
+        <h4>recipes</h4>
+        <div class="tags-list">
+            <a href=" ">Beef (1)</a>
+            <a href=" ">Breakfast (2)</a>
+            <a href=" ">Carrots (3)</a>
+            <a href=" ">Food (4)</a>
+        </div>
+    </div>
+    <!-- end of tag container -->
+    <!-- recipes list -->
+    <div class="recipes-list">
+        <!-- single recipe -->
+        <a href="single-recipe.html" class="recipe">
+            <img src="../final/assets/recipes/recipe-1.jpeg" class="img recipe-img" alt="" />
+            <h5>Carne Asada</h5>
+            <p>Prep : 15min | Cook : 5min</p>
+        </a>
+    </div>
+    <!-- end of recipes list -->
+</section>
+</main>

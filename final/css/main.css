@@ -360,7 +360,6 @@ Page
 */
 
 .page {
-  width: 90vw;
   max-width: var(--max-width);
   margin: 0 auto;
 }
@@ -404,7 +403,7 @@ Hero
   height: 40vh;
   position: relative;
   margin-bottom: 2rem;
-  background: url('../assets/main.jpeg') center/cover no-repeat;
+  background: url('../../final/assets/main.jpeg') center/cover no-repeat;
   border-radius: var(--borderRadius);
 }
 .hero-container {
@@ -743,4 +742,12 @@ Recipe Template
   padding-bottom: 0.75rem;
   color: var(--primary-500);
   text-transform: capitalize;
+}
+
+.inscription {
+  display: flex;
+  justify-content: center;
+  /* Centrage horizontal */
+  align-items: center;
+  /* Centrage vertical */
 }

@@ -16,12 +16,12 @@ if (!filter_var($postData['email'], FILTER_VALIDATE_EMAIL)) {
 } else {
      foreach ($users as $user) {
          if (
-             $user['email'] === $postData['email'] &&
+             $user['mail'] === $postData['email'] &&
              $user['password'] === $postData['password']
          ) {
              $_SESSION['LOGGED_USER'] = [
-                 'email' => $user['email'],
-                 'user_id' => $user['user_id'],
+                 'email' => $user['mail'],
+                 'user_id' => $user['id'],
              ];
          }
      }

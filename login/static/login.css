@@ -1,24 +1,16 @@
-.nav{
-    display: inline-block;
-}
-.menu{
-    display: flex   ;
-}
-
-
-.form{
+.form {
     width: 250px;
     height: 380px;
-    background: linear-gradient(to top, rgba(0,0,0,0.8)50%,rgba(0,0,0,0.8)50%);
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.8)50%, rgba(0, 0, 0, 0.8)50%);
     position: absolute;
     top: -20px;
     left: 870px;
-    transform: translate(0%,-5%);
+    transform: translate(0%, -5%);
     border-radius: 10px;
     padding: 25px;
 }
 
-.form h2{
+.form h2 {
     width: 220px;
     font-family: sans-serif;
     text-align: center;
@@ -30,7 +22,7 @@
     padding: 8px;
 }
 
-.form input{
+.form input {
     width: 240px;
     height: 35px;
     background: transparent;
@@ -45,23 +37,19 @@
     font-family: sans-serif;
 }
 
-.form input:focus{
+.form input:focus {
     outline: none;
 }
 
-::placeholder{
+::placeholder {
     color: #fff;
     font-family: Arial;
 }
 
-.footer {
-    bottom: 0;
-    width: 100%;
-    height: 60px; /* Hauteur de votre footer */
-}
 
 
-.btnn{
+
+.btnn {
     width: 240px;
     height: 40px;
     background: #ff7200;
@@ -74,43 +62,53 @@
     transition: 0.4s ease;
 }
 
-.btnn:hover{
+.btnn:hover {
     background: #fff;
     color: #ff7200;
 }
-.btnn a{
+
+.btnn a {
     text-decoration: none;
     color: #000;
     font-weight: bold;
 }
 
-.form .link{
+.form .link {
     font-family: Arial, Helvetica, sans-serif;
     font-size: 17px;
     padding-top: 20px;
     text-align: center;
 }
-.form .link a{
+
+.form .link a {
     text-decoration: none;
     color: #ff7200;
 }
-.liw{
+
+.liw {
     padding-top: 15px;
     padding-bottom: 10px;
     text-align: center;
 }
-.icons a{
+
+.icons a {
     text-decoration: none;
     color: #fff;
 }
-.icons ion-icon{
+
+.icons ion-icon {
     color: #fff;
     font-size: 30px;
     padding-left: 14px;
     padding-top: 5px;
     transition: 0.3s ease;
 }
-.icons ion-icon:hover{
+
+.icons ion-icon:hover {
     color: #ff7200;
+}
+
+.card-body {
+    background-color: #504acc;
 }
 
