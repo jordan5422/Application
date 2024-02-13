@@ -23,6 +23,7 @@ require_once(__DIR__ . '/../base/link.php');
         <?php
         require_once(__DIR__ . '/../base/header.php');
         ?>
+        
         <main class="page">
             <div class="main">
                 <br>

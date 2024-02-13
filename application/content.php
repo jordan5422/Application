@@ -5,16 +5,6 @@ require_once(__DIR__ . '/../variables/functions.php');
 ?>
 
 
-<header class="hero">
-    <div class="hero-container">
-        <div class="hero-text">
-            <h1>simply recipes</h1>
-            <h4>no fluff, just recipes</h4>
-        </div>
-    </div>
-</header>
-
-
 <section class="recipes-container">
     <!-- tag container -->
     <div class="tags-container">
