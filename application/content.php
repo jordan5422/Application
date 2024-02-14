@@ -7,16 +7,6 @@ require_once(__DIR__ . '/../configuration/databaseconnect.php');
 
 
 ?>
-
-    <!-- header -->
-    <header class="hero">
-        <div class="hero-container">
-            <div class="hero-text">
-                <h1>Recettes simples</h1>
-                <h4>Pas de fioritures, juste des recettes</h4>
-            </div>
-        </div>
-    </header>
     <!-- end of header -->
     <section class="recipes-container">
         <!-- tag container -->
@@ -37,7 +27,7 @@ require_once(__DIR__ . '/../configuration/databaseconnect.php');
             <?php
             // Boucle à travers les recettes récupérées de la base de données
             foreach ($recetteImages as $recetteImage) {
-                echo '<a href="content_unique.php?id=' . $recetteImage['id_recette'] . '" class="recipe">';
+                echo '<a href="application/content_unique.php?id=' . $recetteImage['id_recette'] . '" class="recipe">';
                 echo '<img src="../' . $recetteImage['lien_image'] . '/' . $recetteImage['nom_recette'] . '.jpeg" class="img recipe-img" alt="' . $recetteImage['nom_recette'] . '" />';
                 echo '<h5>' . $recetteImage['nom_recette'] . '</h5>';
                 echo '<p>Prep: ' . $recetteImage['prep_recette'] . ' min | Cook: ' . $recetteImage['cook_recette'] . ' min</p>';
