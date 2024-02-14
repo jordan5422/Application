@@ -4,6 +4,8 @@ require_once(__DIR__ . '/../variables/variables.php');
 require_once(__DIR__ . '/../variables/functions.php');
 require_once(__DIR__ . '/../configuration/databaseconnect.php');
 
+
+
 ?>
 
 <head>
@@ -27,8 +29,8 @@ require_once(__DIR__ . '/../configuration/databaseconnect.php');
     <header class="hero">
         <div class="hero-container">
             <div class="hero-text">
-                <h1>simply recipes</h1>
-                <h4>no fluff, just recipes</h4>
+                <h1>Recettes simples</h1>
+                <h4>Pas de fioritures, juste des recettes</h4>
             </div>
         </div>
     </header>
@@ -36,28 +38,30 @@ require_once(__DIR__ . '/../configuration/databaseconnect.php');
     <section class="recipes-container">
         <!-- tag container -->
         <div class="tags-container">
-            <h4>recipes</h4>
+            <h4>Types de recettes</h4>
             <div class="tags-list">
-                <a href="tag-template.html">Beef (1)</a>
-                <a href="tag-template.html">Breakfast (2)</a>
-                <a href="tag-template.html">Carrots (3)</a>
-                <a href="tag-template.html">Food (4)</a>
+                <?php
+                foreach ($types as $type) {
+                    echo '<p ' . urlencode($type['type']) . '">' . $type['type'] . ' (' . $type['count'] . ')</p>';
+
+                }
+                ?>
             </div>
         </div>
         <!-- end of tag container -->
         <!-- recipes list -->
         <div class="recipes-list">
-            <!-- Boucle foreach pour afficher les images dynamiquement -->
-            <?php foreach ($images as $item) : ?>
-                <a href="recipe.php?id=<?= $item['id_image'] ?>" class="recipe">
-                    <img src="<?= "../static/images/" . $item['nom_image'] ?>" class="img recipe-img" alt="<?= $item['nom_image'] ?>">
-                    <h5><?= $item['nom_recette'] ?></h5>
-                    <p>Prep : 15min | Cook : 5min</p>
-                </a>
-            <?php endforeach; ?>
-            <!-- Fin de la boucle foreach -->
+            <?php
+            // Boucle à travers les recettes récupérées de la base de données
+            foreach ($recetteImages as $recetteImage) {
+                echo '<a href="content_unique.php?id=' . $recetteImage['id_recette'] . '" class="recipe">';
+                echo '<img src="../' . $recetteImage['lien_image'] . '/' . $recetteImage['nom_recette'] . '.jpeg" class="img recipe-img" alt="' . $recetteImage['nom_recette'] . '" />';
+                echo '<h5>' . $recetteImage['nom_recette'] . '</h5>';
+                echo '<p>Prep: ' . $recetteImage['prep_recette'] . ' min | Cook: ' . $recetteImage['cook_recette'] . ' min</p>';
+                echo '</a>';
+            }
+            ?>
         </div>
         <!-- end of recipes list -->
-
     </section>
 </main>

@@ -37,7 +37,7 @@
       <div class="nav-center">
         <div class="nav-header">
           <a href="index.html" class="nav-logo">
-            <img src="./assets/logo.svg" alt="simply recipes" />
+            <img src="../assets/logo.svg" alt="simply recipes" />
           </a>
           <button class="nav-btn btn">
             <i class="fas fa-align-justify"></i>
