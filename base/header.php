@@ -26,6 +26,11 @@
             <a class="nav-link" href="/../application/contact.php" class="btn">Contact</a>
           </div>
         </li>
+        <?php if (isset($_SESSION['LOGGED_USER'])) : ?>
+          <li class="nav-item">
+            <a class="nav-link" href="/../application/profil.php">Profil</a>
+          </li>
+        <?php endif; ?>
       </ul>
     </div>
   </div>
