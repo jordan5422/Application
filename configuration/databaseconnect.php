@@ -1,5 +1,6 @@
 <?php
 require_once(__DIR__ . '/mysql.php'); 
+$mysqlClient = null;
 
 try {
     $mysqlClient = new PDO(

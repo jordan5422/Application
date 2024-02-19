@@ -21,7 +21,11 @@ if (!filter_var($postData['email'], FILTER_VALIDATE_EMAIL)) {
          ) {
              $_SESSION['LOGGED_USER'] = [
                  'email' => $user['mail'],
-                 'user_id' => $user['id'],
+                 'id' => $user['id'],
+                 'nom' => $user['nom'],
+                 'telephone' => $user['telephone'],
+                 'role' => $user['role'],
+
              ];
          }
      }
