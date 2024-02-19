@@ -42,3 +42,21 @@ if (isset($postData)) {
     }
     
 }
+
+
+
+<div class="card-body media align-items-center">
+                                    <img src="https://bootdey.com/img/Content/avatar/avatar1.png" alt
+                                        class="d-block ui-w-80">
+                                    <br>
+                                    <div class="media-body ml-4">
+                                        <div class="row">
+                                            <div class="col-md-4">
+                                                <label class="btn btn-outline-primary">
+                                                    Nouvelle photo
+                                                    <input type="file" name="photo" class="account-settings-fileinput">
+                                                </label> &nbsp;
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>

@@ -29,11 +29,13 @@ $types = $typesStatement->fetchAll(PDO::FETCH_ASSOC);
     <div class="tags-container">
         <h4>Types de recettes</h4>
         <div class="tags-list">
-        <?php foreach ($types as $type) : ?>
-            <button class="tag" data-type="<?= htmlspecialchars($type['type']); ?>">
-                <?= htmlspecialchars($type['type']); ?> (<?= $type['count']; ?>)
-            </button>
-        <?php endforeach; ?>
+
+            <?php foreach ($types as $type): ?>
+                <button class="tag" data-type="<?= htmlspecialchars($type['type']); ?>">
+                    <?= htmlspecialchars($type['type']); ?> (
+                    <?= $type['count']; ?>)
+                </button>
+            <?php endforeach; ?>
         </div>
     </div>
     <!-- end of tag container -->
@@ -43,44 +45,4 @@ $types = $typesStatement->fetchAll(PDO::FETCH_ASSOC);
     </div>
     <!-- end of recipes list -->
 </section>
-
 <!-- JavaScript pour le filtre des recettes par type -->
-
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-<script>
-    $(document).ready(function() {
-        $('.tag').click(function() {
-            var type = $(this).data('type'); // Récupère le type de recette sur lequel on a cliqué
-
-            $.ajax({
-                url: 'filtres_recettes.php', // Nom du nouveau fichier PHP à créer pour le filtrage
-                type: 'GET',
-                data: {
-                    'type': type
-                },
-                success: function(data) {
-                    // Met à jour la liste des recettes avec les recettes filtrées retournées par le serveur
-                    $('.recipes-list').html(data);
-                }
-            });
-        });
-    });
-
-</script>
-<script>
-$(document).ready(function() {
-    $('.like-btn').click(function() {
-        const recetteId = $(this).data('id');
-        $.ajax({
-            url: 'handle_like.php',
-            type: 'POST',
-            data: { 'id_recette': recetteId },
-            success: function(data) {
-                const result = JSON.parse(data);
-                $('button[data-id="' + recetteId + '"]').next('.like-count').text(result.newLikeCount);
-            }
-        });
-    });
-});
-</script>
-
