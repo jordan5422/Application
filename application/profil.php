@@ -33,67 +33,55 @@ require_once(__DIR__ . '/../base/link.php');
                                 href="#account-change-password">Change password</a>
                             <a class="list-group-item list-group-item-action" data-toggle="list"
                                 href="#account-info">Info</a>
-                            <a class="list-group-item list-group-item-action" data-toggle="list"
-                                href="#account-social-links">Social links</a>
-                            <a class="list-group-item list-group-item-action" data-toggle="list"
-                                href="#account-connections">Connections</a>
-                            <a class="list-group-item list-group-item-action" data-toggle="list"
-                                href="#account-notifications">Notifications</a>
+
                         </div>
                     </div>
                     <div class="col-md-9">
                         <div class="tab-content">
-                            <div class="tab-pane fade active show" id="account-general">
-                                <div class="card-body media align-items-center">
-                                    <img src="https://bootdey.com/img/Content/avatar/avatar1.png" alt
-                                        class="d-block ui-w-80">
-                                    <div class="media-body ml-4">
-                                        <label class="btn btn-outline-primary">
-                                            Upload new photo
-                                            <input type="file" class="account-settings-fileinput">
-                                        </label> &nbsp;
-                                        <button type="button" class="btn btn-default md-btn-flat">Reset</button>
-                                        <div class="text-light small mt-1">Allowed JPG, GIF or PNG. Max size of 800K
-                                        </div>
+
+                            <div class="card-body media align-items-center">
+                                <img src="https://bootdey.com/img/Content/avatar/avatar1.png" alt
+                                    class="d-block ui-w-80">
+                                <div class="media-body ml-4">
+                                    <label class="btn btn-outline-primary">
+                                        Upload new photo
+                                        <input type="file" class="account-settings-fileinput">
+                                    </label> &nbsp;
+                                    <button type="button" class="btn btn-default md-btn-flat">Reset</button>
+                                    <div class="text-light small mt-1">Allowed JPG, GIF or PNG. Max size of 800K
                                     </div>
                                 </div>
-                                <hr class="border-light m-0">
+                            </div>
+                            <hr class="border-light m-0">
+                            <div class="tab-pane fade active show" id="account-general">
                                 <div class="card-body">
                                     <div class="form-group">
-                                        <label class="form-label">Username</label>
-                                        <input type="text" class="form-control mb-1" value="nmaxwell">
-                                    </div>
-                                    <div class="form-group">
-                                        <label class="form-label">Name</label>
-                                        <input type="text" class="form-control" value="Nelle Maxwell">
+                                        <label class="form-label">Nom</label>
+                                        <input type="text" class="form-control mb-1" name="nom">
                                     </div>
                                     <div class="form-group">
                                         <label class="form-label">E-mail</label>
-                                        <input type="text" class="form-control mb-1" value="nmaxwell@mail.com">
-                                        <div class="alert alert-warning mt-3">
-                                            Your email is not confirmed. Please check your inbox.<br>
-                                            <a href="javascript:void(0)">Resend confirmation</a>
-                                        </div>
+                                        <input type="text" class="form-control mb-1" name="email">
                                     </div>
                                     <div class="form-group">
-                                        <label class="form-label">Company</label>
-                                        <input type="text" class="form-control" value="Company Ltd.">
+                                        <label class="form-label">Telephone</label>
+                                        <input type="number" class="form-control mb-1" name="telephone">
                                     </div>
                                 </div>
                             </div>
                             <div class="tab-pane fade" id="account-change-password">
                                 <div class="card-body pb-2">
                                     <div class="form-group">
-                                        <label class="form-label">Current password</label>
-                                        <input type="password" class="form-control">
+                                        <label class="form-label">Mot de passe</label>
+                                        <input type="password" name="password" class="form-control">
                                     </div>
                                     <div class="form-group">
-                                        <label class="form-label">New password</label>
-                                        <input type="password" class="form-control">
+                                        <label class="form-label">Nouveau mot de passe</label>
+                                        <input type="password" name="Npassword" class="form-control">
                                     </div>
                                     <div class="form-group">
-                                        <label class="form-label">Repeat new password</label>
-                                        <input type="password" class="form-control">
+                                        <label class="form-label">Confirmation</label>
+                                        <input type="password" name="Cpassword" class="form-control">
                                     </div>
                                 </div>
                             </div>
@@ -132,135 +120,14 @@ require_once(__DIR__ . '/../base/link.php');
                                     </div>
                                 </div>
                             </div>
-                            <div class="tab-pane fade" id="account-social-links">
-                                <div class="card-body pb-2">
-                                    <div class="form-group">
-                                        <label class="form-label">Twitter</label>
-                                        <input type="text" class="form-control" value="https://twitter.com/user">
-                                    </div>
-                                    <div class="form-group">
-                                        <label class="form-label">Facebook</label>
-                                        <input type="text" class="form-control" value="https://www.facebook.com/user">
-                                    </div>
-                                    <div class="form-group">
-                                        <label class="form-label">Google+</label>
-                                        <input type="text" class="form-control" value>
-                                    </div>
-                                    <div class="form-group">
-                                        <label class="form-label">LinkedIn</label>
-                                        <input type="text" class="form-control" value>
-                                    </div>
-                                    <div class="form-group">
-                                        <label class="form-label">Instagram</label>
-                                        <input type="text" class="form-control" value="https://www.instagram.com/user">
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="tab-pane fade" id="account-connections">
-                                <div class="card-body">
-                                    <button type="button" class="btn btn-twitter">Connect to
-                                        <strong>Twitter</strong></button>
-                                </div>
-                                <hr class="border-light m-0">
-                                <div class="card-body">
-                                    <h5 class="mb-2">
-                                        <a href="javascript:void(0)" class="float-right text-muted text-tiny"><i
-                                                class="ion ion-md-close"></i> Remove</a>
-                                        <i class="ion ion-logo-google text-google"></i>
-                                        You are connected to Google:
-                                    </h5>
-                                    <a href="/cdn-cgi/l/email-protection" class="__cf_email__"
-                                        data-cfemail="f9979498818e9c9595b994989095d79a9694">[email&#160;protected]</a>
-                                </div>
-                                <hr class="border-light m-0">
-                                <div class="card-body">
-                                    <button type="button" class="btn btn-facebook">Connect to
-                                        <strong>Facebook</strong></button>
-                                </div>
-                                <hr class="border-light m-0">
-                                <div class="card-body">
-                                    <button type="button" class="btn btn-instagram">Connect to
-                                        <strong>Instagram</strong></button>
-                                </div>
-                            </div>
-                            <div class="tab-pane fade" id="account-notifications">
-                                <div class="card-body pb-2">
-                                    <h6 class="mb-4">Activity</h6>
-                                    <div class="form-group">
-                                        <label class="switcher">
-                                            <input type="checkbox" class="switcher-input" checked>
-                                            <span class="switcher-indicator">
-                                                <span class="switcher-yes"></span>
-                                                <span class="switcher-no"></span>
-                                            </span>
-                                            <span class="switcher-label">Email me when someone comments on my
-                                                article</span>
-                                        </label>
-                                    </div>
-                                    <div class="form-group">
-                                        <label class="switcher">
-                                            <input type="checkbox" class="switcher-input" checked>
-                                            <span class="switcher-indicator">
-                                                <span class="switcher-yes"></span>
-                                                <span class="switcher-no"></span>
-                                            </span>
-                                            <span class="switcher-label">Email me when someone answers on my forum
-                                                thread</span>
-                                        </label>
-                                    </div>
-                                    <div class="form-group">
-                                        <label class="switcher">
-                                            <input type="checkbox" class="switcher-input">
-                                            <span class="switcher-indicator">
-                                                <span class="switcher-yes"></span>
-                                                <span class="switcher-no"></span>
-                                            </span>
-                                            <span class="switcher-label">Email me when someone follows me</span>
-                                        </label>
-                                    </div>
-                                </div>
-                                <hr class="border-light m-0">
-                                <div class="card-body pb-2">
-                                    <h6 class="mb-4">Application</h6>
-                                    <div class="form-group">
-                                        <label class="switcher">
-                                            <input type="checkbox" class="switcher-input" checked>
-                                            <span class="switcher-indicator">
-                                                <span class="switcher-yes"></span>
-                                                <span class="switcher-no"></span>
-                                            </span>
-                                            <span class="switcher-label">News and announcements</span>
-                                        </label>
-                                    </div>
-                                    <div class="form-group">
-                                        <label class="switcher">
-                                            <input type="checkbox" class="switcher-input">
-                                            <span class="switcher-indicator">
-                                                <span class="switcher-yes"></span>
-                                                <span class="switcher-no"></span>
-                                            </span>
-                                            <span class="switcher-label">Weekly product updates</span>
-                                        </label>
-                                    </div>
-                                    <div class="form-group">
-                                        <label class="switcher">
-                                            <input type="checkbox" class="switcher-input" checked>
-                                            <span class="switcher-indicator">
-                                                <span class="switcher-yes"></span>
-                                                <span class="switcher-no"></span>
-                                            </span>
-                                            <span class="switcher-label">Weekly blog digest</span>
-                                        </label>
-                                    </div>
-                                </div>
-                            </div>
                         </div>
                     </div>
                 </div>
             </div>
             <div class="text-right mt-3">
-                <button type="button" class="btn btn-primary">Save changes</button>&nbsp;
-                <button type="button" class="btn btn-default">Cancel</button>
+                <button type="button" class="btn btn-primary">Enregistrer</button>&nbsp;
+                <button type="button" class="btn btn-default">Annuler</button>
+                <button type="button" class="btn btn-danger">Supprimer le compte</button>&nbsp;
             </div>
         </div>
         <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script>

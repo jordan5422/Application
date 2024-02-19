@@ -1,6 +1,6 @@
 <?php
 session_start();
-require_once(__DIR__ . '/../base/link.php');
+require_once(__DIR__ . '/../configuration/databaseconnect.php');
 require_once(__DIR__ . '/../variables/variables.php');
 require_once(__DIR__ . '/../variables/functions.php');
 $errors = [];
@@ -17,7 +17,7 @@ if (!empty($_POST)) {
                 }
             }
             if (!$isPresent) {
-                addUser($_POST);
+                addUser($_POST, $mysqlClient);
                 redirectToUrl('../../login/login.php');
             } else {
                 redirectToUrl('../signup.php');
@@ -58,6 +58,10 @@ require_once(__DIR__ . '/../base/link.php');
                         <div class="form-row">
                             <label html="email" class="form-label">Votre e-mail</label>
                             <input type="text" name="email" id="email" class="form-input" />
+                        </div>
+                        <div class="form-row">
+                            <label html="telephone" class="form-label">Votre telephone</label>
+                            <input type="number" name="telephone" id="telephone" class="form-input" />
                         </div>
                         <div class="form-row">
                             <label html="Mot de passe" class="form-label">mot de passe</label>

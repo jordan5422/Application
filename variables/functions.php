@@ -79,9 +79,20 @@ function validerInscription($formulaire)
     return $errors;
 }
 
-function addUser($postData)
+function addUser($postData, $mysqlClient)
 {
-    require_once(__DIR__ . '/../configuration/databaseconnect.php');
+    $insertRecipe = $mysqlClient->prepare('INSERT INTO users(mail, password, telephone, nom, role) VALUES (:mail, :password, :telephone, :nom, :role)');
+    $insertRecipe->execute([
+        'mail' => $postData['email'],
+        'password' => $postData['password'],
+        'telephone' => (int)$postData['telephone'],
+        'nom' => $postData['nom'],
+        'role' => 'user',
+    ]);
+}
+
+function ModifyUser($postData, $mysqlClient)
+{
     $insertRecipe = $mysqlClient->prepare('INSERT INTO users(mail, password, telephone, nom, role) VALUES (:mail, :password, :telephone, :nom, :role)');
     $insertRecipe->execute([
         'mail' => $postData['email'],
@@ -91,6 +102,8 @@ function addUser($postData)
         'role' => 'user',
     ]);
 }
+
+
 
 function post($data, $url)
 {
