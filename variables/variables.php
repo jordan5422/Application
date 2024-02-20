@@ -19,4 +19,7 @@ $recetteImages = $recetteImageStatement->fetchAll(PDO::FETCH_ASSOC);
 $typesStatement = $mysqlClient->query("SELECT type, COUNT(*) AS count FROM recette GROUP BY type");
 $types = $typesStatement->fetchAll(PDO::FETCH_ASSOC);
 
+$recipesStatement = $mysqlClient->prepare('SELECT * FROM recette');
+$recipesStatement->execute();
+$recipes = $recipesStatement->fetchAll();
 
