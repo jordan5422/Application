@@ -41,6 +41,35 @@ function redirectToUrl(string $url): never
     exit();
 }
 
+function getAllUsers($mysqlClient)
+{
+    $usersStatement = $mysqlClient->prepare('SELECT * FROM users');
+    $usersStatement->execute();
+    $users = $usersStatement->fetchAll();
+    return $users;0
+}
+
+// mise a jour des données de session 
+function sessionMAJ($users)
+{
+    foreach ($users as $user) {
+        if (
+            $user['mail'] === $_SESSION['LOGGED_USER']['email']
+        ) {
+            $_SESSION['LOGGED_USER'] = [
+                'email' => $user['mail'],
+                'id' => $user['id'],
+                'nom' => $user['nom'],
+                'telephone' => $user['telephone'],
+                'role' => $user['role'],
+                'photo' => $user['photo'],
+                'password' => $user['password'],
+            ];
+            break;
+        }
+    }
+}
+
 function validerInscription($formulaire)
 {
     // Assignation et nettoyage des données soumises
@@ -85,23 +114,40 @@ function addUser($postData, $mysqlClient)
     $insertRecipe->execute([
         'mail' => $postData['email'],
         'password' => $postData['password'],
-        'telephone' => (int)$postData['telephone'],
+        'telephone' => (int) $postData['telephone'],
         'nom' => $postData['nom'],
         'role' => 'user',
     ]);
 }
 
-function ModifyUser($postData, $mysqlClient)
+function deleteUser($postData, $mysqlClient)
 {
-    $insertRecipe = $mysqlClient->prepare('INSERT INTO users(mail, password, telephone, nom, role) VALUES (:mail, :password, :telephone, :nom, :role)');
-    $insertRecipe->execute([
-        'mail' => $postData['email'],
-        'password' => $postData['password'],
-        'telephone' => 0000,
-        'nom' => $postData['nom'],
-        'role' => 'user',
+    // Préparation de la requête de suppression
+    $deleteUser = $mysqlClient->prepare('DELETE FROM users WHERE mail = :mail');
+
+    // Exécution de la requête de suppression
+    $deleteUser->execute([
+        'mail' => $postData['email']
     ]);
 }
+
+
+function ModifyUser($postData, $mysqlClient, $photo)
+{
+    // Assurez-vous que le champ 'photo' est inclus dans $postData si nécessaire
+    $updateUser = $mysqlClient->prepare('UPDATE users SET password = :password, telephone = :telephone, nom = :nom, role = :role, photo = :photo WHERE mail = :mail');
+
+    // Exécution de la requête avec les données passées en paramètre
+    $updateUser->execute([
+        'mail' => $postData['email'],
+        'password' => $postData['password'], // Assurez-vous de hasher le mot de passe avant l'insertion
+        'telephone' => $postData['telephone'], // Assurez-vous que 'telephone' est fourni dans $postData
+        'nom' => $postData['nom'],
+        'role' => $postData['role'] ?? 'user', // Utilisation de l'opérateur null coalescent pour définir une valeur par défaut
+        'photo' => $photo['filePath'] // Assurez-vous que 'photo' est fourni dans $postData
+    ]);
+}
+
 
 
 
@@ -123,4 +169,41 @@ function post($data, $url)
     curl_close($ch);
     // Affichez la réponse du serveur
     echo $response;
+}
+
+function verifPhoto($file)
+{
+    $photoErrors = [];
+    $isFileLoaded = false;
+
+    if (isset($file['screenshot']) && $file['screenshot']['error'] === 0) {
+        if ($file['screenshot']['size'] > 5 * 1024 * 1024) {
+            $photoErrors["volume"] = "Fichier trop volumineux";
+        }
+
+        $fileInfo = pathinfo($file['screenshot']['name']);
+        $extension = strtolower($fileInfo['extension']);
+        $allowedExtensions = ['jpg', 'jpeg', 'gif', 'png'];
+        if (!in_array($extension, $allowedExtensions)) {
+            $photoErrors["extension"] = "L'extension '{$extension}' n'est pas autorisée";
+        }
+
+        $path = __DIR__ . '/../uploads/';
+        if (!is_dir($path) && !mkdir($path, 0755, true)) {
+            $photoErrors["dossier"] = "Le dossier 'uploads' est manquant et n'a pas pu être créé";
+        }
+
+        if (empty($photoErrors)) {
+            $newFileName = uniqid('photo_', true) . '.' . $extension;
+            if (!move_uploaded_file($file['screenshot']['tmp_name'], $path . $newFileName)) {
+                $photoErrors["echec_deplacement"] = "Erreur lors du déplacement du fichier";
+            } else {
+                $isFileLoaded = true;
+            }
+        }
+    } else {
+        $photoErrors["fichier"] = "Aucun fichier envoyé ou erreur inconnue";
+    }
+
+    return ['errors' => $photoErrors, 'isFileLoaded' => $isFileLoaded, 'filePath' => $isFileLoaded ? "/../uploads/" . $newFileName : ''];
 }

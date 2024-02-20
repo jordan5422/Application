@@ -20,3 +20,4 @@ $typesStatement = $mysqlClient->query("SELECT type, COUNT(*) AS count FROM recet
 $types = $typesStatement->fetchAll(PDO::FETCH_ASSOC);
 
 
+
