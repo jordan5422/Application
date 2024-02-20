@@ -1,7 +1,9 @@
 <?php
-require_once(__DIR__ . '/../variables/variables.php');
-//require_once('path/to/variables/functions.php');
-require_once(__DIR__ . '/../configuration/databaseconnect.php');
+require_once(__DIR__ . '/configuration/mysql.php');
+require_once(__DIR__ . '/configuration/databaseconnect.php');
+require_once(__DIR__ . '/variables/variables.php');
+require_once(__DIR__ . '/variables/functions.php');
+require_once(__DIR__ . '/application/isConnect.php');
 
 
 $typeFilter = isset($_GET['type']) && $_GET['type'] ? $_GET['type'] : null;
