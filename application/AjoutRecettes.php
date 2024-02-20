@@ -11,10 +11,8 @@ $photo = [];
 if (!empty($_POST)) {
     $errors = validerDonnee($_POST);
     $photo = verifPhoto($_FILES);
-    if (empty($errors) && empty($photo['errors'])) {
-        $info = addRecette($_POST, $mysqlClient, $_SESSION['LOGGED_USER']['id']);
-        addPhoto($photo, $info['id']);
-    }
+    $info = addRecette($_POST, $mysqlClient, $_SESSION['LOGGED_USER']['id']);
+    addPhoto($photo, $mysqlClient, $info['id']);
 }
 sessionMAJ(getAllUsers($mysqlClient));
 $userCourant = $_SESSION['LOGGED_USER'];
@@ -33,6 +31,18 @@ require_once(__DIR__ . '/../base/link.php');
         <?php
         require_once(__DIR__ . '/../base/header.php');
         ?>
+        <div class="form-row justify-content-center">
+            <?php
+            if (!empty($errors) || !empty($photo['errors'])) {
+                foreach ($errors as $error) {
+                    echo '<span style="color: red;">' . htmlspecialchars($error) . '</span><br>';
+                }
+                foreach ($photo['errors'] as $error) {
+                    echo '<span style="color: red;">' . htmlspecialchars($error) . '</span><br>';
+                }
+            }
+            ?>
+        </div>
 
         <main class="page">
             <section class="contact-container">
@@ -60,7 +70,7 @@ require_once(__DIR__ . '/../base/link.php');
                         </div>
                         <div class="form-row">
                             <label for="screenshot" class="">inserer une photo du plat :</label>
-                            <input type="file" name="scrennshot" id="screenshot" class="form-input " required />
+                            <input type="file" name="screenshot" id="screenshot" class="form-input " required />
                         </div>
                         <div class="form-row">
                             <label for="message" class="form-label">Description de la Recette</label>

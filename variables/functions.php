@@ -158,9 +158,9 @@ function post($data, $url)
     // Spécifiez l'URL de destination de votre requête cURL
     curl_setopt($ch, CURLOPT_URL, "http://exemple.com/traitement.php");
     // Indiquez à cURL que vous souhaitez effectuer une requête POST
-    curl_setopt($ch, CURLOPT_POST, true);
+    curl_setopt($ch, CURLOPTpostData, true);
     // Attachez la chaîne de requête en tant que données POST
-    curl_setopt($ch, CURLOPT_POSTFIELDS, $queryString);
+    curl_setopt($ch, CURLOPTpostDataFIELDS, $queryString);
     // Retournez la réponse au lieu de l'afficher
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
     // Exécutez la session cURL
@@ -171,13 +171,13 @@ function post($data, $url)
     echo $response;
 }
 
-function addPhoto($postData, $mysqlClient)
+function addPhoto($postData, $mysqlClient, $id)
 {
-    $insertRecipe = $mysqlClient->prepare('INSERT INTO photo(nom, lien, id_recette) VALUES (:nom, :lien, :id_recette)');
+    $insertRecipe = $mysqlClient->prepare('INSERT INTO photo(nom, lien, id_recette) VALUES (:nom, :dossier, :id_recette)');
     $insertRecipe->execute([
         'nom' => $postData['nom'],
-        'lien' => $postData['dossier'],
-        'id_recette' => (int) $postData['id_recette'],
+        'dossier' => $postData['dossier'],
+        'id_recette' => (int) $id,
     ]);
 }
 
@@ -256,10 +256,9 @@ function verifPhoto($file)
 {
     $photoErrors = [];
     $isFileLoaded = false;
-    $newFileName = '';
-
+    $newFileName = '1.jpg';
     if (isset($file['screenshot']) && $file['screenshot']['error'] === 0) {
-        if ($file['screenshot']['size'] > 5 * 1024 * 1024) {
+        if ($file['screenshot']['size'] > 5 * 1024 * 1024 * 1024) {
             $photoErrors["volume"] = "Fichier trop volumineux";
         }
 
@@ -270,7 +269,7 @@ function verifPhoto($file)
             $photoErrors["extension"] = "L'extension '{$extension}' n'est pas autorisée";
         }
 
-        $path = __DIR__ . '/../uploads/';
+        $path = __DIR__ . '../final/assets/';
         if (!is_dir($path) && !mkdir($path, 0755, true)) {
             $photoErrors["dossier"] = "Le dossier 'uploads' est manquant et n'a pas pu être créé";
         }
@@ -287,7 +286,7 @@ function verifPhoto($file)
         $photoErrors["fichier"] = "Aucun fichier envoyé ou erreur inconnue";
     }
 
-    return ['errors' => $photoErrors, 'isFileLoaded' => $isFileLoaded, 'nom'=> $newFileName, 'dossier'=> "/../uploads/", 'filePath' => $isFileLoaded ? "/../uploads/" . $newFileName : ''];
+    return ['errors' => $photoErrors, 'isFileLoaded' => $isFileLoaded, 'nom' => $newFileName, 'dossier' => "final/assets", 'filePath' => $isFileLoaded ? "/../uploads/" . $newFileName : ''];
 }
 
 
@@ -296,7 +295,6 @@ function addRecette($postData, $mysqlClient, $id)
     $errors = [];
     $recipeId = 0;
     if (!empty($postData)) {
-        //recupere données du formulaire
         $name = $postData['name'];
         $nbr = $postData['nbr'];
         $type = $postData['type'];
@@ -305,12 +303,11 @@ function addRecette($postData, $mysqlClient, $id)
         $description = $postData['description'];
         $instruction = $postData['instruction_cuisson'];
 
-
-        $sql = "INSERT INTO recette (nom, type, nombre_plats, temps_preparation, temps_Cuisson, description, instruction_cuisson, id_users) VALUES ( ?,?, ?, ?, ?, ?, ?,?)";
+        $sql = "INSERT INTO recette (nom, type, nombre_plats, temps_preparation, temps_Cuisson, instruction_cuisson, id_users) VALUES ( ?, ?, ?, ?, ?, ?,?)";
         $stmt = $mysqlClient->prepare($sql);
-        $stmt->execute([$name, $nbr, $type, $temps_prep, $temps_cuis, $description, $instruction, $id]);
+        $stmt->execute([$name, $type, $nbr, $temps_prep, $temps_cuis, $instruction, $_SESSION['LOGGED_USER']['id']]);
         $recipeId = $mysqlClient->lastInsertId();
-    }else{
+    } else {
         $errors['donnees'] = "donnees manquantes";
     }
     return ["erreur" => $errors, "id" => $recipeId];
@@ -344,9 +341,10 @@ function modifRecette($postData, $mysqlClient, $file)
 function validerDonnee($formulaire)
 {
     $errors = [];
-    foreach($formulaire as $donnee){
-        if(empty($donnees)){
+    foreach ($formulaire as $donnee) {
+        if (empty($donnee)) {
             $errors["donnee"] = "Il ya une donnee manquante !";
+            break;
         }
     }
     return $errors;
