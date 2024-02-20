@@ -25,6 +25,8 @@ if (!filter_var($postData['email'], FILTER_VALIDATE_EMAIL)) {
                  'nom' => $user['nom'],
                  'telephone' => $user['telephone'],
                  'role' => $user['role'],
+                 'photo' => $user['photo'],
+                 'password' => $user['password'],
 
              ];
          }
