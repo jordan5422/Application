@@ -16,6 +16,8 @@ $(document).ready(function () {
     });
 });
 
+
+
 // $(document).ready(function () {
 //     $('.like-btn').click(function () {
 //         console.log("je suis dans les likes");

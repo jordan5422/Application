@@ -244,7 +244,7 @@ function addRecette($postData, $mysqlClient, $file)
     return ["id" => $recipeId, "erreur" => $errors];
 }
 
-function addIngredient($postData,$mysqlClient)
+function addIngredient($postData,$mysqlClient,$file)
 {
     $errors = [];
     if (!empty($postData)) {
@@ -258,13 +258,13 @@ function addIngredient($postData,$mysqlClient)
 
         // Traitement de l'image
         $target_dir = "uploads/"; // Assurez-vous que ce dossier existe et est accessible en écriture
-        $target_file = $target_dir . basename($_FILES["photo"]["name"]);
+        $target_file = $target_dir . basename($file["photo"]["name"]);
         $uploadOk = 1;
         $imageFileType = strtolower(pathinfo($target_file, PATHINFO_EXTENSION));
 
         // Vérifiez si le fichier est une image réelle
         //if(isset($postData["submit"])) {
-        $check = getimagesize($_FILES["photo"]["tmp_name"]);
+        $check = getimagesize($file["photo"]["tmp_name"]);
         if ($check !== false) {
             $uploadOk = 1;
         } else {
@@ -291,8 +291,8 @@ function addIngredient($postData,$mysqlClient)
         }
 
         // Déplacez le fichier téléchargé vers le nouveau chemin
-        if (move_uploaded_file($_FILES["photo"]["tmp_name"], $target_file)) {
-            // echo "Le fichier " . htmlspecialchars(basename($_FILES["photo"]["name"])) . " a été téléchargé.";
+        if (move_uploaded_file($file["photo"]["tmp_name"], $target_file)) {
+            // echo "Le fichier " . htmlspecialchars(basename($file["photo"]["name"])) . " a été téléchargé.";
         } else {
             // echo "Désolé, une erreur s'est produite lors du téléchargement de votre fichier.";
             $errors["telechargement"] = "Erreur de telechargement de fichier";

@@ -50,27 +50,3 @@ foreach ($recetteImages as $recetteImage) {
 
 }
 
-?>
-
-<script>
-        $(document).ready(function () {
-            console.log("je suis dans le document");
-            $('.like-btn').click(function () {
-                console.log("j'ai clique le boutton");
-                var recetteId = $(this).data('id');
-
-                $.ajax({
-                    url: 'toggle_like.php', // Le script PHP qui gérera le "like"
-                    type: 'POST',
-                    data: {
-                        'id_recette': recetteId,
-                        'id_user': <?php echo $_SESSION['LOGGED_USER']['user_id']; ?> // Supposons que l'ID de l'utilisateur est stocké dans $_SESSION['user_id']
-                    },
-                    success: function (data) {
-                        var result = JSON.parse(data);
-                        $('.like-count[data-id="' + recetteId + '"]').text(result.newLikeCount); // Mise à jour du nombre de "likes"
-                    }
-                });
-            });
-        });
-    </script>

@@ -1,8 +1,8 @@
 <?php
-
-require_once(__DIR__ . '../configuration/databaseconnect.php');
-require_once(__DIR__ . '/variables/functions.php');
-require_once(__DIR__ . '/variables/variables.php');
+session_start();
+require_once(__DIR__ . '/../configuration/databaseconnect.php');
+require_once(__DIR__ . '/../variables/functions.php');
+require_once(__DIR__ . '/../variables/variables.php');
 
 $errors = [];
 $errors = addIngredient($_POST, $mysqlClient, $_FILES);
@@ -15,14 +15,14 @@ $errors = addIngredient($_POST, $mysqlClient, $_FILES);
 <html lang="fr">
 
 <?php
-require_once(__DIR__ . '/base/link.php');
+require_once(__DIR__ . '/../base/link.php');
 ?>
 
 <body>
   <!-- nav  -->
   <section class="container">
     <?php
-    require_once(__DIR__ . '/base/header.php');
+    require_once(__DIR__ . '/../base/header.php');
     ?>
     <!-- end of nav -->
     <main class="page">
@@ -55,7 +55,7 @@ require_once(__DIR__ . '/base/link.php');
     </main>
     <!-- footer -->
     <?php
-    require_once(__DIR__ . '/base/footer.php');
+    require_once(__DIR__ . '/../base/footer.php');
     ?>
   </section>
 </body>

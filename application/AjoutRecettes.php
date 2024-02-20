@@ -1,9 +1,9 @@
 <?php
 session_start();
-require_once(__DIR__ . '../configuration/mysql.php');
-require_once(__DIR__ . '../configuration/databaseconnect.php');
-require_once(__DIR__ . '/variables/functions.php');
-require_once(__DIR__ . '/variables/variables.php');
+require_once(__DIR__ . '/../configuration/mysql.php');
+require_once(__DIR__ . '/../configuration/databaseconnect.php');
+require_once(__DIR__ . '/../variables/functions.php');
+require_once(__DIR__ . '/../variables/variables.php');
 
 $errors = [];
 $idRecette = addRecette($_POST, $mysqlClient, $_FILES)["id"];
@@ -12,13 +12,13 @@ $errors = addRecette($_POST, $mysqlClient, $_FILES)["erreur"];
 <!DOCTYPE html>
 <html lang="fr">
 <?php
-require_once(__DIR__ . '/base/link.php');
+require_once(__DIR__ . '/../base/link.php');
 ?>
 
 <body>
     <section class="container">
         <?php
-        require_once(__DIR__ . '/base/header.php');
+        require_once(__DIR__ . '/../base/header.php');
         ?>
 
         <main class="page">
@@ -68,7 +68,7 @@ require_once(__DIR__ . '/base/link.php');
         </main>
         <!-- footer -->
         <?php
-        require_once(__DIR__ . '/base/footer.php');
+        require_once(__DIR__ . '/../base/footer.php');
         ?>
     </section>
 </body>
