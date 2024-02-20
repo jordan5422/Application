@@ -46,7 +46,7 @@ function getAllUsers($mysqlClient)
     $usersStatement = $mysqlClient->prepare('SELECT * FROM users');
     $usersStatement->execute();
     $users = $usersStatement->fetchAll();
-    return $users;0
+    return $users;
 }
 
 // mise a jour des données de session 
