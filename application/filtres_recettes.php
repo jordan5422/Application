@@ -1,7 +1,8 @@
 <?php
-require_once(__DIR__ . '/../variables/variables.php');
+require_once(__DIR__ . '/variables/variables.php');
 //require_once('path/to/variables/functions.php');
-require_once(__DIR__ . '/../configuration/databaseconnect.php');
+require_once(__DIR__ . '/configuration/databaseconnect.php');
+
 
 $typeFilter = isset($_GET['type']) && $_GET['type'] ? $_GET['type'] : null;
 
@@ -24,13 +25,22 @@ foreach ($recetteImages as $recetteImage) {
     $likesStatement = $mysqlClient->prepare('SELECT COUNT(*) FROM likes WHERE id_recette = ?');
     $likesStatement->execute([$recetteImage['id_recette']]);
     $likesCount = $likesStatement->fetchColumn();
+    
 
-    echo '<a href="content_unique.php?id=' . $recetteImage['id_recette'] . '" class="recipe">';
-    echo '<img src="../' . $recetteImage['lien_image'] . '/' . $recetteImage['nom_recette'] . '.jpeg" class="img recipe-img" alt="' . htmlspecialchars($recetteImage['nom_recette']) . '" />';
+    echo '<a href="/content_unique.php?id=' . $recetteImage['id_recette'] . '" class="recipe">';
+    echo '<img src="./' . $recetteImage['lien_image'] . '/' . $recetteImage['nom_recette'] . '.jpeg" class="img recipe-img" alt="' . htmlspecialchars($recetteImage['nom_recette']) . '" />';
+
     echo '<h5>' . htmlspecialchars($recetteImage['nom_recette']) . '</h5>';
+
     echo '<p>Prep: ' . $recetteImage['prep_recette'] . ' min | Cook: ' . $recetteImage['cook_recette'] . ' min</p>';
-    // Bouton like et nombre de likes
-    echo '</a>';
-    echo '<button class="like-btn" data-id="' . $recetteImage['id_recette'] . '">Like</button>';
+    echo '<br>';
+    echo '</span>';// Bouton like et nombre de likes
+    echo '<button class="like-btn" data-id="' . $recetteImage['id_recette'] . '"> <ion-icon name="heart"></ion-icon></button>';
+    echo '&nbsp;';
     echo '<span class="like-count" data-id="' . $recetteImage['id_recette'] . '">' . $likesCount . '</span>';
+    echo '</a>';
+
+
+
+
 }

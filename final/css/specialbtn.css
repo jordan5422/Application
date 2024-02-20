@@ -1,0 +1,47 @@
+/* Styles pour le bouton like */
+.like-btn {
+    padding: 10px 20px;
+    font-size: 16px;
+    border: none;
+    background-color: #db3c34;
+    color: #fff;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .like-btn:hover {
+    background-color: #b95929;
+  }
+  
+  .like-btn:active {
+    background-color: #8d561f;
+  }
+  
+  .like-btn:focus {
+    outline: none;
+  }
+  
+  /* Animation au survol */
+  .like-btn:hover::before {
+    content: "\2764"; /* Code unicode pour le symbole "coeur" */
+    display: inline-block;
+    margin-right: 5px;
+    animation: heartBeat 0.5s infinite alternate;
+  }
+  
+  @keyframes heartBeat {
+    from {
+      transform: scale(1);
+    }
+    to {
+      transform: scale(1.2);
+    }
+  }
+  
+  /* Styles CSS pour masquer l'icône au survol et au clic */
+  .like-btn:hover ion-icon,
+  .like-butn:active ion-icon {
+    display: none;
+  }
+  

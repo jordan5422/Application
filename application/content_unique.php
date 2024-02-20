@@ -7,14 +7,15 @@ require_once(__DIR__ . '/../configuration/databaseconnect.php');
 
 // Récupérer l'identifiant unique de la recette depuis $_GET
 if (isset($_GET['id'])) {
-    $recipe_id = $_GET['id'] - 1;
+
+    //var_dump($_GET['id']);
+    $recipe_id = $_GET['id'] ;
     //var_dump($recipe_id);
 
     // Utilisez $recipe_id pour récupérer les détails de la recette depuis la base de données et affichez-les
 }
 
 
-if ($recipe_id != 0) {
     $textsql = $mysqlClient->prepare("SELECT r.id AS id_recette,r.type AS type_recette, r.nom AS nom_recette, r.temps_preparation AS prep_recette, r.temps_cuisson AS cook_recette, r.instruction_cuisson AS cook_instruction, i.id AS id_ingredient, i.nom AS nom_ingredient, i.origine AS origine_ingredient, i.quantite AS quantite_ingredient FROM recette r INNER JOIN ingredients i ON r.id = i.id_recette WHERE r.id=:idd");
     $textsql->bindParam(":idd", $recipe_id);
     $textsql->execute();
@@ -28,22 +29,19 @@ if ($recipe_id != 0) {
     $commentaires->bindParam(":idd", $recipe_id);
     $commentaires->execute();
     $commentaire = $commentaires->fetchAll(PDO::FETCH_ASSOC);
-} else {
-    $recipe_id =  $recipe_id + 1;
-    $textsql = $mysqlClient->prepare("SELECT r.id AS id_recette,r.type AS type_recette, r.nom AS nom_recette, r.temps_preparation AS prep_recette, r.temps_cuisson AS cook_recette, r.instruction_cuisson AS cook_instruction, i.id AS id_ingredient, i.nom AS nom_ingredient, i.origine AS origine_ingredient, i.quantite AS quantite_ingredient FROM recette r INNER JOIN ingredients i ON r.id = i.id_recette WHERE r.id=:idd");
-    $textsql->bindParam(":idd", $recipe_id);
-    $textsql->execute();
-    $result = $textsql->fetchAll(PDO::FETCH_ASSOC);
 
-    $commentaires = $mysqlClient->prepare("SELECT c.id AS id_commentaire, c.commentaire, c.heure, c.date, u.nom AS nom_utilisateur
+
+    $recetteImageStatement = $mysqlClient->prepare("SELECT r.nom AS nom_recette, r.type AS type_recette, r.id AS id_recette, r.temps_preparation AS prep_recette, r.temps_cuisson AS cook_recette, i.nom AS nom_image, i.id AS id_image, i.lien AS lien_image
     FROM recette r
-    INNER JOIN commentaires c ON r.id = c.id_recette
-    INNER JOIN users u ON c.id_users = u.id
+    INNER JOIN photo i ON r.id = i.id_recette
     WHERE r.id = :idd");
-    $commentaires->bindParam(":idd", $recipe_id);
-    $commentaires->execute();
-    $commentaire = $commentaires->fetchAll(PDO::FETCH_ASSOC);
-}
+    $recetteImageStatement->bindParam(":idd", $recipe_id);
+    $recetteImageStatement->execute();
+    $recetteImages = $recetteImageStatement->fetchAll(PDO::FETCH_ASSOC);
+
+   
+
+
 
 
 //Test d'affichage 
@@ -73,7 +71,7 @@ require_once(__DIR__ . '/../base/link.php');
             <div class="recipe-page">
                 <section class="recipe-hero">
                     <?php
-                    echo '<img src="../' . $recetteImages[$recipe_id]['lien_image'] . '/' . $recetteImages[$recipe_id]['nom_recette'] . '.jpeg" class="img recipe-hero-img" alt="' . $recetteImages[$recipe_id]['nom_recette'] . '" />'; ?>
+                    echo '<img src="../' . $recetteImages[0]['lien_image'] . '/' . $recetteImages[0]['nom_recette'] . '.jpeg" class="img recipe-hero-img" alt="' . $recetteImages[0]['nom_recette'] . '" />'; ?>
                     <article class="recipe-info">
                         <?php echo '<h2>' . $result[0]['nom_recette'] . '</h2>'; ?>
                         <p> Cette recette est de type : <?php echo '<span>' . $result[0]['type_recette'] . '</span>'; ?>
@@ -112,14 +110,15 @@ require_once(__DIR__ . '/../base/link.php');
                             <!-- je veux affciher les commentaires ici -->
                             <h4>Commentaires</h4>
                             <?php foreach ($commentaire as $comment) : ?>
-                                <p class="single-ingredient"><?php echo $comment['commentaire'] . ' A ' . $comment['heure'] . ' le ' . $comment['date'] . ' par ' .  $comment['nom_utilisateur']; ?></p>
+                                <p class="single-ingredient"><?php echo $comment['commentaire'] . ' ( A ' . $comment['heure'] . ' le ' . $comment['date'] . ' par ' .  $comment['nom_utilisateur'] . ' )'; ?></p>
                             <?php endforeach; ?>
                             <h4>Ajouter un commentaire !</h4>
-                            <form id="comment-form" action="ajout_commentaire.php" method="POST">
+                            <form id="comment-form" action="/application/ajout_commentaire.php" method="POST">
                                 <div class="form-group">
                                     <label for="comment">Commentaire:</label>
                                     <textarea class="form-control" id="comment" name="comment" rows="3"></textarea>
                                 </div>
+                                <input type="hidden" name="id_recette" value="<?php echo $_GET['id']; ?>">
                                 <button type="submit" class="btn btn-primary">Envoyer</button>
                             </form>
                         </div>
