@@ -1,7 +1,7 @@
 <?php
-require_once(__DIR__ . '/variables/variables.php');
+require_once(__DIR__ . '/../variables/variables.php');
 //require_once('path/to/variables/functions.php');
-require_once(__DIR__ . '/configuration/databaseconnect.php');
+require_once(__DIR__ . '/../configuration/databaseconnect.php');
 
 
 $idRecette = $_POST['id_recette'];
@@ -28,4 +28,3 @@ $newLikeCountStmt->execute([$idRecette]);
 $newLikeCount = $newLikeCountStmt->fetchColumn();
 
 echo json_encode(['newLikeCount' => $newLikeCount]);
-?>
