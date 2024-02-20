@@ -1,7 +1,7 @@
 <?php
 
-const MYSQL_HOST = 'db';
+const MYSQL_HOST = 'localhost';
 const MYSQL_PORT = 3306;
-const MYSQL_NAME = 'application';
+const MYSQL_NAME = 'fooddb';
 const MYSQL_USER = 'root';
-const MYSQL_PASSWORD = 'root';
+const MYSQL_PASSWORD = '';
