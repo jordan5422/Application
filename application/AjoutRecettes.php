@@ -6,9 +6,22 @@ require_once(__DIR__ . '/../variables/functions.php');
 require_once(__DIR__ . '/../variables/variables.php');
 
 $errors = [];
-$idRecette = addRecette($_POST, $mysqlClient, $_FILES)["id"];
-$errors = addRecette($_POST, $mysqlClient, $_FILES)["erreur"];
+$photo = [];
+
+if (!empty($_POST)) {
+    $errors = validerDonnee($_POST);
+    $photo = verifPhoto($_FILES);
+    if (empty($errors) && empty($photo['errors'])) {
+        $info = addRecette($_POST, $mysqlClient, $_SESSION['LOGGED_USER']['id']);
+        addPhoto($photo, $info['id']);
+    }
+}
+sessionMAJ(getAllUsers($mysqlClient));
+$userCourant = $_SESSION['LOGGED_USER'];
+
 ?>
+
+
 <!DOCTYPE html>
 <html lang="fr">
 <?php
@@ -46,8 +59,8 @@ require_once(__DIR__ . '/../base/link.php');
                             <input type="text" name="temps_cuisson" id="name" class="form-input" required />
                         </div>
                         <div class="form-row">
-                            <label for="photo" for="photo" class="form-label">inserer une photo du plat :</label>
-                            <input type="file" name="photo" id="photo" class="form-input " accept="image/*" required />
+                            <label for="screenshot" class="">inserer une photo du plat :</label>
+                            <input type="file" name="scrennshot" id="screenshot" class="form-input " required />
                         </div>
                         <div class="form-row">
                             <label for="message" class="form-label">Description de la Recette</label>
@@ -64,7 +77,7 @@ require_once(__DIR__ . '/../base/link.php');
                 </article>
             </section>
             <!-- featured recipes -->
-            
+
         </main>
         <!-- footer -->
         <?php

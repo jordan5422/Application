@@ -176,7 +176,7 @@ function addPhoto($postData, $mysqlClient)
     $insertRecipe = $mysqlClient->prepare('INSERT INTO photo(nom, lien, id_recette) VALUES (:nom, :lien, :id_recette)');
     $insertRecipe->execute([
         'nom' => $postData['nom'],
-        'lien' => $postData['password'],
+        'lien' => $postData['dossier'],
         'id_recette' => (int) $postData['id_recette'],
     ]);
 }
@@ -256,6 +256,7 @@ function verifPhoto($file)
 {
     $photoErrors = [];
     $isFileLoaded = false;
+    $newFileName = '';
 
     if (isset($file['screenshot']) && $file['screenshot']['error'] === 0) {
         if ($file['screenshot']['size'] > 5 * 1024 * 1024) {
@@ -286,14 +287,15 @@ function verifPhoto($file)
         $photoErrors["fichier"] = "Aucun fichier envoyé ou erreur inconnue";
     }
 
-    return ['errors' => $photoErrors, 'isFileLoaded' => $isFileLoaded, 'filePath' => $isFileLoaded ? "/../uploads/" . $newFileName : ''];
+    return ['errors' => $photoErrors, 'isFileLoaded' => $isFileLoaded, 'nom'=> $newFileName, 'dossier'=> "/../uploads/", 'filePath' => $isFileLoaded ? "/../uploads/" . $newFileName : ''];
 }
 
 
-function addRecette($postData, $mysqlClient, $file, $id)
+function addRecette($postData, $mysqlClient, $id)
 {
     $errors = [];
-    if (!empty($postData)&&!empty($file)) {
+    $recipeId = 0;
+    if (!empty($postData)) {
         //recupere données du formulaire
         $name = $postData['name'];
         $nbr = $postData['nbr'];
@@ -307,10 +309,11 @@ function addRecette($postData, $mysqlClient, $file, $id)
         $sql = "INSERT INTO recette (nom, type, nombre_plats, temps_preparation, temps_Cuisson, description, instruction_cuisson, id_users) VALUES ( ?,?, ?, ?, ?, ?, ?,?)";
         $stmt = $mysqlClient->prepare($sql);
         $stmt->execute([$name, $nbr, $type, $temps_prep, $temps_cuis, $description, $instruction, $id]);
+        $recipeId = $mysqlClient->lastInsertId();
     }else{
         $errors['donnees'] = "donnees manquantes";
     }
-    return $errors;
+    return ["erreur" => $errors, "id" => $recipeId];
 }
 
 
@@ -336,3 +339,16 @@ function modifRecette($postData, $mysqlClient, $file)
     }
     return $errors;
 }
+
+
+function validerDonnee($formulaire)
+{
+    $errors = [];
+    foreach($formulaire as $donnee){
+        if(empty($donnees)){
+            $errors["donnee"] = "Il ya une donnee manquante !";
+        }
+    }
+    return $errors;
+}
+
