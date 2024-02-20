@@ -130,6 +130,9 @@ require_once(__DIR__ . '/../base/link.php');
                                 <p class="single-ingredient"><?php echo $row['quantite_ingredient'] . ' ' . $row['nom_ingredient']; ?></p>
                             <?php endforeach; ?>
                         </div>
+                        <div>
+                        <a href="./AjoutIngredient.php?id=<?php echo $_GET["id"];?>"><button type="button" class="btn btn-primary">Ajouter un ingredient</button></a>
+                        </div>
                     </article>
 
                 </section>

@@ -51,7 +51,7 @@ require_once(__DIR__ . '/../base/link.php');
                             <label html="message" class="form-label">message</label>
                             <textarea name="message" id="message" class="form-textarea"></textarea>
                         </div>
-                        <button type="submit" class="btn btn-block">
+                        <button type="submit" class="btn btn-block btn-success">
                             submit
                         </button>
                     </form>
