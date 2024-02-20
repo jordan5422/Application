@@ -25,22 +25,52 @@ foreach ($recetteImages as $recetteImage) {
     $likesStatement = $mysqlClient->prepare('SELECT COUNT(*) FROM likes WHERE id_recette = ?');
     $likesStatement->execute([$recetteImage['id_recette']]);
     $likesCount = $likesStatement->fetchColumn();
-    
 
-    echo '<a href="/content_unique.php?id=' . $recetteImage['id_recette'] . '" class="recipe">';
+    echo '<div class="" style="width: 18rem;">';
+    echo '<div class="card-body">';
+    echo '<h5 class="card-title">';
+    echo '<a href="/application/content_unique.php?id=' . $recetteImage['id_recette'] . '" class="recipe">';
     echo '<img src="./' . $recetteImage['lien_image'] . '/' . $recetteImage['nom_recette'] . '.jpeg" class="img recipe-img" alt="' . htmlspecialchars($recetteImage['nom_recette']) . '" />';
-
+    echo '</a>';
+    echo '</h5>';
+    echo '<p class="card-text">';
+    echo '<a href="/application/content_unique.php?id=' . $recetteImage['id_recette'] . '" class="recipe">';
     echo '<h5>' . htmlspecialchars($recetteImage['nom_recette']) . '</h5>';
-
+    echo '</a>';
     echo '<p>Prep: ' . $recetteImage['prep_recette'] . ' min | Cook: ' . $recetteImage['cook_recette'] . ' min</p>';
-    echo '<br>';
-    echo '</span>';// Bouton like et nombre de likes
+    echo '</p>';
+    echo '<div class="recipe">';
     echo '<button class="like-btn" data-id="' . $recetteImage['id_recette'] . '"> <ion-icon name="heart"></ion-icon></button>';
     echo '&nbsp;';
     echo '<span class="like-count" data-id="' . $recetteImage['id_recette'] . '">' . $likesCount . '</span>';
-    echo '</a>';
-
-
+    echo '</div>';
+    echo '</div>';
+    echo '</div>';
 
 
 }
+
+?>
+
+<script>
+        $(document).ready(function () {
+            console.log("je suis dans le document");
+            $('.like-btn').click(function () {
+                console.log("j'ai clique le boutton");
+                var recetteId = $(this).data('id');
+
+                $.ajax({
+                    url: 'toggle_like.php', // Le script PHP qui gérera le "like"
+                    type: 'POST',
+                    data: {
+                        'id_recette': recetteId,
+                        'id_user': <?php echo $_SESSION['LOGGED_USER']['user_id']; ?> // Supposons que l'ID de l'utilisateur est stocké dans $_SESSION['user_id']
+                    },
+                    success: function (data) {
+                        var result = JSON.parse(data);
+                        $('.like-count[data-id="' + recetteId + '"]').text(result.newLikeCount); // Mise à jour du nombre de "likes"
+                    }
+                });
+            });
+        });
+    </script>

@@ -36,10 +36,13 @@ require_once(__DIR__ . '/application/isConnect.php');
     <link rel="stylesheet" href="./final/css/style.css">
     <link rel="stylesheet" href="./final/css//specialbtn.css">
 
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous" />
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous" />
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
+        integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r"
+        crossorigin="anonymous"></script>
     <script src="https://unpkg.com/ionicons@5.4.0/dist/ionicons.js">
-        (function(doc) {
+        (function (doc) {
             var scriptElm = doc.scripts[doc.scripts.length - 1];
             var warn = ['[ionicons] Deprecated script, please remove: ' + scriptElm.outerHTML];
 
@@ -73,18 +76,19 @@ require_once(__DIR__ . '/application/isConnect.php');
 </head>
 
 <body>
-<section class="container">
+    <section class="container">
         <!-- inclusion de l'entête du site -->
         <?php require_once(__DIR__ . '/base/header.php'); ?>
         <main class="page">
             <div class="main">
-            <?php require_once(__DIR__ . '/application/content.php'); ?>
+                <?php require_once(__DIR__ . '/application/content.php'); ?>
             </div>
         </main>
     </section>
     <!-- inclusion du bas de page du site -->
 
     <?php require_once(__DIR__ . '/base/footer.php'); ?>
+    
 </body>
 
 </html>

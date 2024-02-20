@@ -16,19 +16,21 @@ $(document).ready(function () {
     });
 });
 
-$(document).ready(function () {
-    $('.like-btn').click(function () {
-        console.log("je suis dans les likes");
-        const recetteId = $(this).data('id');
-        $.ajax({
-            url: '../../application/handle_like.php',
-            type: 'POST',
-            data: { 'id_recette': recetteId },
-            success: function (data) {
-                const result = JSON.parse(data);
-                $('button[data-id="' + recetteId + '"]').next('.like-count').text(result.newLikeCount);
-            }
-        });
-    });
-});
+// $(document).ready(function () {
+//     $('.like-btn').click(function () {
+//         console.log("je suis dans les likes");
+//         const recetteId = $(this).data('id');
+//         $.ajax({
+//             url: '../../application/handle_like.php',
+//             type: 'POST',
+//             data: { 'id_recette': recetteId },
+//             success: function (data) {
+//                 const result = JSON.parse(data);
+//                 $('button[data-id="' + recetteId + '"]').next('.like-count').text(result.newLikeCount);
+//             }
+//         });
+//     });
+// });
+
+
 
