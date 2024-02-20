@@ -171,80 +171,28 @@ function post($data, $url)
     echo $response;
 }
 
-
-function addRecette($postData, $mysqlClient, $file)
+function addPhoto($postData, $mysqlClient)
 {
-    $recipeId = 0;
-    $errors = [];
-    if (!empty($postData)) {
-
-
-        //recupere données du formulaire
-
-        $name = $postData['name'];
-        $nbr = $postData['nbr'];
-        $type = $postData['type'];
-        $temps_prep = $postData['temps_preparation'];
-        $temps_cuis = $postData['temps_cuisson'];
-        $description = $postData['description'];
-        $instruction = $postData['instruction_cuisson'];
-
-        // Traitement de l'image
-        $target_dir = "uploads/"; // Assurez-vous que ce dossier existe et est accessible en écriture
-        $target_file = $target_dir . basename($file["photo"]["name"]);
-        $uploadOk = 1;
-        $imageFileType = strtolower(pathinfo($target_file, PATHINFO_EXTENSION));
-
-        // Vérifiez si le fichier est une image réelle
-        //if(isset($postData["submit"])) {
-        $check = getimagesize($file["photo"]["tmp_name"]);
-        if ($check !== false) {
-            // echo "Le fichier est une image - " . $check["mime"] . ".";
-            $uploadOk = 1;
-        } else {
-            $errors["type"] =  "Le fichier n'est pas une image.";
-            $uploadOk = 0;
-        }
-        //}
-
-        $id = 1;
-        //ajout dans BD
-        if ($uploadOk == 1) {
-            $sql = "INSERT INTO recette (nom, type, nombre_plats, temps_preparation, temps_Cuisson, photo, description, instruction_cuisson,id_users) VALUES (?, ?,?, ?, ?, ?, ?, ?,?)";
-            $stmt = $mysqlClient->prepare($sql);
-
-            try {
-                $stmt->execute([$name, $nbr, $type, $temps_prep, $temps_cuis, $target_file, $description, $instruction, $id]);
-                // echo "Recette ajoutée avec succès.";
-            } catch (PDOException $e) {
-                $errors["insertion"] =  "Erreur lors de l'insertion des données: " . $e->getMessage();
-            }
-        } else {
-            $errors["telechargement"] =  "Désolé, il y a eu une erreur lors du téléchargement de votre fichier.";
-            $uploadOk = 0; // Marquer le téléchargement comme échoué
-        }
-
-
-        // echo "Ingrédient ajouté avec succès dans la bd";
-
-        // Déplacez le fichier téléchargé vers le nouveau chemin
-        if (move_uploaded_file($file["photo"]["tmp_name"], $target_file)) {
-
-            // Utilisation de lastInsertId pour obtenir l'ID de la dernière insertion
-            $recipeId = $mysqlClient->lastInsertId();
-
-
-            // Redirection vers l'autre page en incluant l'ID dans l'URL
-            // header('Location: ../AjoutIngredient.php?id=' . $recipeId);
-
-        } else {
-            $errors["telechargement"] =  "Désolé, une erreur s'est produite lors du téléchargement de votre fichier.";
-        }
-    }
-    return ["id" => $recipeId, "erreur" => $errors];
+    $insertRecipe = $mysqlClient->prepare('INSERT INTO photo(nom, lien, id_recette) VALUES (:nom, :lien, :id_recette)');
+    $insertRecipe->execute([
+        'nom' => $postData['nom'],
+        'lien' => $postData['password'],
+        'id_recette' => (int) $postData['id_recette'],
+    ]);
 }
 
-function addIngredient($postData,$mysqlClient,$file)
+function deletePhoto($postData, $mysqlClient)
+{
+    // Préparation de la requête de suppression
+    $deletePhoto = $mysqlClient->prepare('DELETE FROM photo WHERE id = :id ');
+    // Exécution de la requête de suppression
+    $deletePhoto->execute([
+        'id' => $postData['id'],
+    ]);
+}
+
+
+function addIngredient($postData, $mysqlClient, $file)
 {
     $errors = [];
     if (!empty($postData)) {
@@ -268,7 +216,7 @@ function addIngredient($postData,$mysqlClient,$file)
         if ($check !== false) {
             $uploadOk = 1;
         } else {
-            $errors["extension"] =  "Le fichier n'est pas une image.";
+            $errors["extension"] = "Le fichier n'est pas une image.";
             $uploadOk = 0;
         }
         //}
@@ -286,7 +234,7 @@ function addIngredient($postData,$mysqlClient,$file)
                 redirectToUrl("AjoutIngredient.php");
             }
         } else {
-            $errors["telechargement"] =  "Désolé, il y a eu une erreur lors du téléchargement de votre fichier.";
+            $errors["telechargement"] = "Désolé, il y a eu une erreur lors du téléchargement de votre fichier.";
             $uploadOk = 0; // Marquer le téléchargement comme échoué
         }
 
@@ -339,4 +287,52 @@ function verifPhoto($file)
     }
 
     return ['errors' => $photoErrors, 'isFileLoaded' => $isFileLoaded, 'filePath' => $isFileLoaded ? "/../uploads/" . $newFileName : ''];
+}
+
+
+function addRecette($postData, $mysqlClient, $file, $id)
+{
+    $errors = [];
+    if (!empty($postData)&&!empty($file)) {
+        //recupere données du formulaire
+        $name = $postData['name'];
+        $nbr = $postData['nbr'];
+        $type = $postData['type'];
+        $temps_prep = $postData['temps_preparation'];
+        $temps_cuis = $postData['temps_cuisson'];
+        $description = $postData['description'];
+        $instruction = $postData['instruction_cuisson'];
+
+
+        $sql = "INSERT INTO recette (nom, type, nombre_plats, temps_preparation, temps_Cuisson, description, instruction_cuisson, id_users) VALUES ( ?,?, ?, ?, ?, ?, ?,?)";
+        $stmt = $mysqlClient->prepare($sql);
+        $stmt->execute([$name, $nbr, $type, $temps_prep, $temps_cuis, $description, $instruction, $id]);
+    }else{
+        $errors['donnees'] = "donnees manquantes";
+    }
+    return $errors;
+}
+
+
+function modifRecette($postData, $mysqlClient, $file)
+{
+    $errors = [];
+    if (!empty($postData) && !empty($file)) {
+        // Récupère les données du formulaire
+        $name = $postData['name'];
+        $nbr = $postData['nbr'];
+        $type = $postData['type'];
+        $temps_prep = $postData['temps_preparation'];
+        $temps_cuis = $postData['temps_cuisson'];
+        $description = $postData['description'];
+        $instruction = $postData['instruction_cuisson'];
+
+        // Préparation de la requête de mise à jour
+        $sql = "UPDATE recette SET nom = ?, type = ?, nombre_plats = ?, temps_preparation = ?, temps_Cuisson = ?, description = ?, instruction_cuisson = ? WHERE id_recette = ?";
+        $stmt = $mysqlClient->prepare($sql);
+        $stmt->execute([$name, $nbr, $type, $temps_prep, $temps_cuis, $description, $instruction]);
+    } else {
+        $errors['donnees'] = "Données manquantes";
+    }
+    return $errors;
 }
