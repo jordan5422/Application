@@ -52,10 +52,13 @@ $types = $typesStatement->fetchAll(PDO::FETCH_ASSOC);
     <link rel="stylesheet" href="./final/css/style.css">
     <link rel="stylesheet" href="./final/css//specialbtn.css">
 
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous" />
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous" />
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
+        integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r"
+        crossorigin="anonymous"></script>
     <script src="https://unpkg.com/ionicons@5.4.0/dist/ionicons.js">
-        (function(doc) {
+        (function (doc) {
             var scriptElm = doc.scripts[doc.scripts.length - 1];
             var warn = ['[ionicons] Deprecated script, please remove: ' + scriptElm.outerHTML];
 
@@ -100,7 +103,7 @@ $types = $typesStatement->fetchAll(PDO::FETCH_ASSOC);
                         <h4>Types de recettes</h4>
                         <div class="tags-list">
 
-                            <?php foreach ($types as $type) : ?>
+                            <?php foreach ($types as $type): ?>
                                 <button class="tag" data-type="<?= htmlspecialchars($type['type']); ?>">
                                     <?= htmlspecialchars($type['type']); ?> (
                                     <?= $type['count']; ?>)
@@ -128,46 +131,40 @@ $types = $typesStatement->fetchAll(PDO::FETCH_ASSOC);
     <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
     <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
     <script>
-        $(document).ready(function() {
-            // Fonction pour gérer le clic sur le bouton "like"
-            function handleLikeButtonClick() {
-                $('.like-btn').click(function() {
-                    var recetteId = $(this).data('id');
-
-                    $.ajax({
-                        url: 'toggle_like.php', // Le script PHP qui gérera le "like"
-                        type: 'POST',
-                        data: {
-                            'id_recette': recetteId,
-                            'id_user': <?php echo $_SESSION['LOGGED_USER']['user_id']; ?> // Supposons que l'ID de l'utilisateur est stocké dans $_SESSION['user_id']
-                        },
-                        success: function(data) {
-                            var result = JSON.parse(data);
-                            $('.like-count[data-id="' + recetteId + '"]').text(result.newLikeCount); // Mise à jour du nombre de "likes"
-                        }
-                    });
-                });
-            }
-
-            // Attachez l'événement click initial du bouton "like"
-            handleLikeButtonClick();
-
-            // Gérez le clic sur les boutons de filtre de recettes
-            $('.tag').click(function() {
+        $(document).ready(function () {
+            $('.tag').click(function () {
                 var type = $(this).data('type'); // Récupère le type de recette sur lequel on a cliqué
 
                 $.ajax({
-                    url: 'filtres_recettes.php', // Nom du nouveau fichier PHP à créer pour le filtrage
+                    url: '/filtres_recettes.php', // Nom du nouveau fichier PHP à créer pour le filtrage
                     type: 'GET',
                     data: {
                         'type': type
                     },
-                    success: function(data) {
+                    success: function (data) {
                         // Met à jour la liste des recettes avec les recettes filtrées retournées par le serveur
                         $('.recipes-list').html(data);
+                    }
+                });
+            });
+        });
+    </script>
+    <script>
+        $(document).ready(function () {
+            $('.like-btn').click(function () {
+                console.log("je suis la");
+                var recetteId = $(this).data('id');
 
-                        // Réattachez l'événement click du bouton "like" après le chargement dynamique du contenu des recettes
-                        handleLikeButtonClick();
+                $.ajax({
+                    url: '/toggle_like.php', // Le script PHP qui gérera le "like"
+                    type: 'POST',
+                    dataType: 'json', // Ajoutez cette ligne pour s'assurer que la réponse est traitée comme du JSON
+                    data: {
+                        'id_recette': recetteId,
+                        'id_user': <?php echo $_SESSION['LOGGED_USER']['id']; ?> // Supposons que l'ID de l'utilisateur est stocké dans $_SESSION['user_id']
+                    },
+                    success: function (result) { // La réponse est automatiquement parsée en tant qu'objet JSON
+                        $('.like-count[data-id="' + recetteId + '"]').text(result.newLikeCount); // Mise à jour du nombre de "likes"
                     }
                 });
             });
