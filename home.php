@@ -6,7 +6,6 @@ require_once(__DIR__ . '/variables/variables.php');
 require_once(__DIR__ . '/variables/functions.php');
 //require_once(__DIR__ . '/application/isConnect.php');
 
-var_dump($_SESSION);
 
 $usersStatement = $mysqlClient->prepare('SELECT * FROM users');
 $usersStatement->execute();
@@ -42,7 +41,31 @@ $userCourant = $_SESSION['LOGGED_USER'];
         <!-- inclusion de l'entête du site -->
         <?php require_once(__DIR__ . '/base/header.php'); ?>
 
-        <?php require_once(__DIR__ . '/application/content.php'); ?>
+        <main class="page">
+            <div class="main">
+                <section class="recipes-container">
+                    <!-- tag container -->
+                    <div class="tags-container">
+                        <h4>Types de recettes</h4>
+                        <div class="tags-list">
+
+                            <?php foreach ($types as $type): ?>
+                                <button class="tag" data-type="<?= htmlspecialchars($type['type']); ?>">
+                                    <?= htmlspecialchars($type['type']); ?> (
+                                    <?= $type['count']; ?>)
+                                </button>
+                            <?php endforeach; ?>
+                        </div>
+                    </div>
+                    <!-- end of tag container -->
+                    <!-- recipes list -->
+                    <div class="recipes-list">
+                        <?php require_once(__DIR__ . '/application/filtres_recettes.php'); ?>
+                    </div>
+                    <!-- end of recipes list -->
+                </section>
+            </div>
+        </main>
     </section>
     <!-- inclusion du bas de page du site -->
 
