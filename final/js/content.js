@@ -1,4 +1,4 @@
-$(document).ready(function () {   
+$(document).ready(function () {
     $('.tag').click(function () {
         var type = $(this).data('type'); // Récupère le type de recette sur lequel on a cliqué
         console.log("je suis dans le javascript");
@@ -14,6 +14,9 @@ $(document).ready(function () {
             }
         });
     });
+
+    
+
 });
 
 

@@ -176,7 +176,7 @@ function addPhoto($postData, $mysqlClient, $id)
     $insertRecipe = $mysqlClient->prepare('INSERT INTO photo(nom, lien, id_recette) VALUES (:nom, :dossier, :id_recette)');
     $insertRecipe->execute([
         'nom' => $postData['nom'],
-        'dossier' => $postData['dossier'],
+        'dossier' => $postData['filePath'],
         'id_recette' => (int) $id,
     ]);
 }
@@ -269,7 +269,7 @@ function verifPhoto($file)
             $photoErrors["extension"] = "L'extension '{$extension}' n'est pas autorisée";
         }
 
-        $path = __DIR__ . '../final/assets/';
+        $path = __DIR__ . '/../uploads/';
         if (!is_dir($path) && !mkdir($path, 0755, true)) {
             $photoErrors["dossier"] = "Le dossier 'uploads' est manquant et n'a pas pu être créé";
         }
@@ -286,9 +286,26 @@ function verifPhoto($file)
         $photoErrors["fichier"] = "Aucun fichier envoyé ou erreur inconnue";
     }
 
-    return ['errors' => $photoErrors, 'isFileLoaded' => $isFileLoaded, 'nom' => $newFileName, 'dossier' => "final/assets", 'filePath' => $isFileLoaded ? "/../uploads/" . $newFileName : ''];
+    return ['errors' => $photoErrors, 'isFileLoaded' => $isFileLoaded, 'nom' => $newFileName, 'dossier' => "uploads", 'filePath' => $isFileLoaded ? "/../uploads/" . $newFileName : ''];
 }
 
+function getPhoto($id, $mysqlClient)
+{
+    $photoStatement = $mysqlClient->prepare('SELECT * FROM photo WHERE id_recette = :id');
+    $photoStatement->execute([
+        'id' => $id,
+    ]);
+    $list = $photoStatement->fetchAll();
+    return $list['nom'];
+}
+
+function nomPhoto($recette, $photos){
+    foreach($photos as $item){
+        if($recette['id_recette'] == $item['id']){
+            return $item["lien"];
+        }
+    }
+}
 
 function addRecette($postData, $mysqlClient, $id)
 {

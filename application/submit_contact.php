@@ -36,7 +36,7 @@ if (isset($_FILES['screenshot']) && $_FILES['screenshot']['error'] === 0) {
     }
 
     // Testons, si le dossier uploads est manquant
-    $path = __DIR__ . '/uploads/';
+    $path = __DIR__ . '../uploads/';
     if (!is_dir($path)) {
         echo "L'envoi n'a pas pu être effectué, le dossier uploads est manquant";
         return;

@@ -25,12 +25,22 @@ foreach ($recetteImages as $recetteImage) {
     $likesStatement = $mysqlClient->prepare('SELECT COUNT(*) FROM likes WHERE id_recette = ?');
     $likesStatement->execute([$recetteImage['id_recette']]);
     $likesCount = $likesStatement->fetchColumn();
+    // $photo = nomPhoto($recetteImage, $photos);
+
+    $photoStatement2 = $mysqlClient->prepare('SELECT lien FROM photo WHERE id_recette = :id');
+    $photoStatement2->execute([
+        'id' => $recetteImage['id_recette'],
+    ]);
+    $list = $photoStatement2->fetchAll();
+    
 
     echo '<div class="" style="width: 18rem;">';
     echo '<div class="card-body">';
     echo '<h5 class="card-title">';
     echo '<a href="/application/content_unique.php?id=' . $recetteImage['id_recette'] . '" class="recipe">';
-    echo '<img src="./' . $recetteImage['lien_image'] . '/' . $recetteImage['nom_recette'] . '.jpeg" class="img recipe-img" alt="' . htmlspecialchars($recetteImage['nom_recette']) . '" />';
+    foreach ($list as $row){
+    echo '<img src="'.  $row["lien"].'" class="img recipe-img" alt="' . htmlspecialchars($recetteImage['nom_recette']) . '" />';
+    ;} 
     echo '</a>';
     echo '</h5>';
     echo '<p class="card-text">';

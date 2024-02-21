@@ -11,6 +11,10 @@ $recetteStatement = $mysqlClient->prepare('SELECT * FROM recette');
 $recetteStatement->execute();
 $recettes = $usersStatement->fetchAll();
 
+$photoStatement = $mysqlClient->prepare('SELECT * FROM photo');
+$photoStatement->execute();
+$photos = $photoStatement->fetchAll();
+
 $recetteImageStatement = $mysqlClient->prepare("SELECT r.nom AS nom_recette, r.type as type_recette, r.id AS id_recette, r.temps_preparation AS prep_recette, r.temps_cuisson AS cook_recette, i.nom AS nom_image, i.id AS id_image, i.lien AS lien_image
     FROM recette r
     INNER JOIN photo i ON r.id = i.id_recette

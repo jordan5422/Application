@@ -11,9 +11,13 @@ $photo = [];
 if (!empty($_POST)) {
     $errors = validerDonnee($_POST);
     $photo = verifPhoto($_FILES);
-    $info = addRecette($_POST, $mysqlClient, $_SESSION['LOGGED_USER']['id']);
-    addPhoto($photo, $mysqlClient, $info['id']);
+    if (empty($errors) && empty($photoErrors['errors'])) {
+        $info = addRecette($_POST, $mysqlClient, $_SESSION['LOGGED_USER']['id']);
+        addPhoto($photo, $mysqlClient, $info['id']);
+    }
 }
+
+
 sessionMAJ(getAllUsers($mysqlClient));
 $userCourant = $_SESSION['LOGGED_USER'];
 
@@ -69,8 +73,11 @@ require_once(__DIR__ . '/../base/link.php');
                             <input type="text" name="temps_cuisson" id="name" class="form-input" required />
                         </div>
                         <div class="form-row">
-                            <label for="screenshot" class="">inserer une photo du plat :</label>
-                            <input type="file" name="screenshot" id="screenshot" class="form-input " required />
+                            <label for="screenshot" class="btn btn-outline-primary">
+                                Nouvelle photo
+                                <input type="file" name="screenshot" id="screenshot"
+                                    class="account-settings-fileinput form-control">
+                            </label> &nbsp;
                         </div>
                         <div class="form-row">
                             <label for="message" class="form-label">Description de la Recette</label>

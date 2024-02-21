@@ -4,11 +4,29 @@ require_once(__DIR__ . '/configuration/mysql.php');
 require_once(__DIR__ . '/configuration/databaseconnect.php');
 require_once(__DIR__ . '/variables/variables.php');
 require_once(__DIR__ . '/variables/functions.php');
-require_once(__DIR__ . '/application/isConnect.php');
+//require_once(__DIR__ . '/application/isConnect.php');
+
+var_dump($_SESSION);
+
+$usersStatement = $mysqlClient->prepare('SELECT * FROM users');
+$usersStatement->execute();
+$users = $usersStatement->fetchAll();
 
 
+$recetteImageStatement = $mysqlClient->prepare("SELECT r.nom AS nom_recette, r.type as type_recette, r.id AS id_recette, r.temps_preparation AS prep_recette, r.temps_cuisson AS cook_recette, i.nom AS nom_image, i.id AS id_image, i.lien AS lien_image
+    FROM recette r
+    INNER JOIN photo i ON r.id = i.id_recette
+");
+$recetteImageStatement->execute();
+$recetteImages = $recetteImageStatement->fetchAll(PDO::FETCH_ASSOC);
 
 
+// Requête pour récupérer les types de recettes et leur nombre associé
+$typesStatement = $mysqlClient->query("SELECT type, COUNT(*) AS count FROM recette GROUP BY type");
+$types = $typesStatement->fetchAll(PDO::FETCH_ASSOC);
+
+sessionMAJ(getAllUsers($mysqlClient));
+$userCourant = $_SESSION['LOGGED_USER'];
 
 ?>
 <!-- inclusion des variables et fonctions -->
@@ -41,54 +59,50 @@ require_once(__DIR__ . '/application/isConnect.php');
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
         integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r"
         crossorigin="anonymous"></script>
-    <script src="https://unpkg.com/ionicons@5.4.0/dist/ionicons.js">
-        (function (doc) {
-            var scriptElm = doc.scripts[doc.scripts.length - 1];
-            var warn = ['[ionicons] Deprecated script, please remove: ' + scriptElm.outerHTML];
-
-            warn.push('To improve performance it is recommended to set the differential scripts in the head as follows:')
-
-            var parts = scriptElm.src.split('/');
-            parts.pop();
-            parts.push('ionicons');
-            var url = parts.join('/');
-
-            var scriptElm = doc.createElement('script');
-            scriptElm.setAttribute('type', 'module');
-            scriptElm.src = url + '/ionicons.esm.js';
-            warn.push(scriptElm.outerHTML);
-            scriptElm.setAttribute('data-stencil-namespace', 'ionicons');
-            doc.head.appendChild(scriptElm);
-
-
-            scriptElm = doc.createElement('script');
-            scriptElm.setAttribute('nomodule', '');
-            scriptElm.src = url + '/ionicons.js';
-            warn.push(scriptElm.outerHTML);
-            scriptElm.setAttribute('data-stencil-namespace', 'ionicons');
-            doc.head.appendChild(scriptElm)
-
-            console.warn(warn.join('\n'));
-
-        })(document);
-    </script>
-    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
 </head>
 
 <body>
     <section class="container">
         <!-- inclusion de l'entête du site -->
         <?php require_once(__DIR__ . '/base/header.php'); ?>
+
         <main class="page">
             <div class="main">
-                <?php require_once(__DIR__ . '/application/content.php'); ?>
+                <section class="recipes-container">
+                    <!-- tag container -->
+                    <div class="tags-container">
+                        <h4>Types de recettes</h4>
+                        <div class="tags-list">
+
+                            <?php foreach ($types as $type): ?>
+                                <button class="tag" data-type="<?= htmlspecialchars($type['type']); ?>">
+                                    <?= htmlspecialchars($type['type']); ?> (
+                                    <?= $type['count']; ?>)
+                                </button>
+                            <?php endforeach; ?>
+                        </div>
+                    </div>
+                    <!-- end of tag container -->
+                    <!-- recipes list -->
+                    <div class="recipes-list">
+                        <?php require_once(__DIR__ . '/application/filtres_recettes.php'); ?>
+                    </div>
+                    <!-- end of recipes list -->
+                </section>
             </div>
         </main>
     </section>
     <!-- inclusion du bas de page du site -->
 
     <?php require_once(__DIR__ . '/base/footer.php'); ?>
-    
+
+
+    <!-- inclusion du bas de page du site -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+
+
 </body>
 
 </html>
