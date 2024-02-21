@@ -71,8 +71,7 @@ require_once(__DIR__ . '/../base/link.php');
 <body class="d-flex flex-column min-vh-100">
     <div class="container">
         <!-- inclusion de l'entête du site -->
-        <?php require_once(__DIR__ . '/../base/header.php'); 
-        var_dump($result);?>
+        <?php require_once(__DIR__ . '/../base/header.php'); ?>
         <main class="page">
             <div class="recipe-page">
                 <section class="recipe-hero">
@@ -133,16 +132,17 @@ require_once(__DIR__ . '/../base/link.php');
                                 <input type="hidden" name="id_recette" value="<?php echo $_GET['id']; ?>">
                                 <br>
                                 <button type="submit" class="btn btn-primary">Envoyer</button>
-                                <?php
-                                $createur = getUserForRecette($mysqlClient, $_GET['id']);
-                                foreach ($createur as $c) {
-                                    if ($_SESSION['LOGGED_USER']['id'] == $c['id_users']) {
-                                        echo '<button type="submit" class="btn btn-danger">supprimer</button>';
-                                        break;
-                                    }
-                                } ?>
-                            </form>
 
+                            </form>
+                            <br>
+                            <?php
+                            $createur = getUserForRecette($mysqlClient, $_GET['id']);
+                            foreach ($createur as $c) {
+                                if ($_SESSION['LOGGED_USER']['id'] == $c['id_users']) {
+                                    echo '<a href="/application/deleteRecette.php?id=' . $_GET['id'] . '"><button type="submit" class="btn btn-danger">supprimer</button></a>';
+                                    break;
+                                }
+                            } ?>
                         </div>
                     </article>
                     <article class="second-column">

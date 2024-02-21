@@ -68,6 +68,7 @@ $userCourant = $_SESSION['LOGGED_USER'];
                         'id_user': <?php echo $_SESSION['LOGGED_USER']['id']; ?> // Supposons que l'ID de l'utilisateur est stocké dans $_SESSION['user_id']
                     },
                     success: function (result) { // La réponse est automatiquement parsée en tant qu'objet JSON
+                        console.log("je suis la dans toogle");
                         $('.like-count[data-id="' + recetteId + '"]').text(result.newLikeCount); // Mise à jour du nombre de "likes"
                     }
                 });

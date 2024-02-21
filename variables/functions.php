@@ -191,6 +191,26 @@ function deletePhoto($postData, $mysqlClient)
     ]);
 }
 
+function deleteRecette($postData, $mysqlClient)
+{
+    $deletePhoto = $mysqlClient->prepare('DELETE FROM photo WHERE id_recette = :id ');
+    // Exécution de la requête de suppression
+    $deletePhoto->execute([
+        'id' => $postData['id'],
+    ]);
+    $deletePhoto = $mysqlClient->prepare('DELETE FROM commentaires WHERE id_recette = :id ');
+    // Exécution de la requête de suppression
+    $deletePhoto->execute([
+        'id' => $postData['id'],
+    ]);
+    // Préparation de la requête de suppression
+    $deletePhoto = $mysqlClient->prepare('DELETE FROM recette WHERE id = :id ');
+    // Exécution de la requête de suppression
+    $deletePhoto->execute([
+        'id' => $postData['id'],
+    ]);
+}
+
 
 function addIngredient($postData, $mysqlClient, $file, $id_recette)
 {
