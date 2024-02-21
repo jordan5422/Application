@@ -192,7 +192,7 @@ function deletePhoto($postData, $mysqlClient)
 }
 
 
-function addIngredient($postData, $mysqlClient, $file)
+function addIngredient($postData, $mysqlClient, $file, $id_recette)
 {
     $errors = [];
     if (!empty($postData)) {
@@ -203,49 +203,11 @@ function addIngredient($postData, $mysqlClient, $file)
         $quantite = $postData['quantite'];
         $description = $postData['message'];
 
-
-        // Traitement de l'image
-        $target_dir = "uploads/"; // Assurez-vous que ce dossier existe et est accessible en écriture
-        $target_file = $target_dir . basename($file["photo"]["name"]);
-        $uploadOk = 1;
-        $imageFileType = strtolower(pathinfo($target_file, PATHINFO_EXTENSION));
-
-        // Vérifiez si le fichier est une image réelle
-        //if(isset($postData["submit"])) {
-        $check = getimagesize($file["photo"]["tmp_name"]);
-        if ($check !== false) {
-            $uploadOk = 1;
-        } else {
-            $errors["extension"] = "Le fichier n'est pas une image.";
-            $uploadOk = 0;
-        }
-        //}
-
-
-        if ($uploadOk == 1) {
-            $sql = "INSERT INTO ingredients (nom, origine, quantite, photo, description, id_recette) VALUES (?, ?, ?, ?, ?, ?)";
-            $stmt = $mysqlClient->prepare($sql);
-
-            try {
-                $stmt->execute([$name, $origine, $quantite, $target_file, $description, 5]);
-                redirectToUrl("home.php");
-            } catch (PDOException $e) {
-                $errors["insertion"] = "Erreur lors de l'insertion des données: " . $e->getMessage();
-                redirectToUrl("AjoutIngredient.php");
-            }
-        } else {
-            $errors["telechargement"] = "Désolé, il y a eu une erreur lors du téléchargement de votre fichier.";
-            $uploadOk = 0; // Marquer le téléchargement comme échoué
-        }
-
-        // Déplacez le fichier téléchargé vers le nouveau chemin
-        if (move_uploaded_file($file["photo"]["tmp_name"], $target_file)) {
-            // echo "Le fichier " . htmlspecialchars(basename($file["photo"]["name"])) . " a été téléchargé.";
-        } else {
-            // echo "Désolé, une erreur s'est produite lors du téléchargement de votre fichier.";
-            $errors["telechargement"] = "Erreur de telechargement de fichier";
-        }
-        // Utilisation de lastInsertId pour obtenir l'ID de la dernière insertion
+        $sql = "INSERT INTO ingredients (nom, origine, quantite, id_recette, photo) VALUES ( ?, ?, ?, ?, ?)";
+        $stmt = $mysqlClient->prepare($sql);
+        $stmt->execute([$name, $origine, (int)$quantite, $id_recette, $file]);
+    } else {
+        $errors['donnees'] = "donnees manquantes";
     }
     return $errors;
 }
@@ -299,9 +261,10 @@ function getPhoto($id, $mysqlClient)
     return $list['nom'];
 }
 
-function nomPhoto($recette, $photos){
-    foreach($photos as $item){
-        if($recette['id_recette'] == $item['id']){
+function nomPhoto($recette, $photos)
+{
+    foreach ($photos as $item) {
+        if ($recette['id_recette'] == $item['id']) {
             return $item["lien"];
         }
     }
@@ -367,3 +330,11 @@ function validerDonnee($formulaire)
     return $errors;
 }
 
+function getUserForRecette($mysqlClient, $id){
+
+    $recetteStatement = $mysqlClient->prepare('SELECT * FROM recette WHERE id = :id');
+    $recetteStatement->execute([
+        'id' => $id,
+    ]);
+    return $recetteStatement->fetchAll();
+}

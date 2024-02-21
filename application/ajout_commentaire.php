@@ -32,7 +32,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $param_comment = trim($_POST["comment"]);
             $param_heure = date("H:i:s"); // Heure actuelle
             $param_date = date("Y-m-d"); // Date actuelle
-            $param_user_id = $_SESSION['LOGGED_USER']['user_id'];
+            $param_user_id = $_SESSION['LOGGED_USER']['id'];
             $param_recipe_id = intval($_POST['id_recette']); // Récupérer l'ID de la recette à partir de la session
 
             // Exécuter la déclaration préparée

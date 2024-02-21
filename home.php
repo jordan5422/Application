@@ -34,63 +34,15 @@ $userCourant = $_SESSION['LOGGED_USER'];
 <!DOCTYPE html>
 <html>
 
+<?php require_once(__DIR__ . '/base/link.php'); ?>
 
-<head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Contact || Final</title>
-    <!-- favicon -->
-    <link rel="shortcut icon" href="./final/assets/favicon.ico" type="image/x-icon" />
-    <!-- normalize -->
-    <link rel="stylesheet" href="./final/css/normalize.css" />
-    <!-- font-awesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css" />
-    <!-- main css -->
-    <link rel="stylesheet" href="./final/css/main.css" />
-    <script src="https://kit.fontawesome.com/b2ba396bc9.js" crossorigin="anonymous"></script>
-    <!-- <link rel="stylesheet" href="style.css"> -->
-    <link rel="stylesheet" href="./static/login.css">
-    <link rel="stylesheet" href="./final/css/style.css">
-    <link rel="stylesheet" href="./final/css//specialbtn.css">
-
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous" />
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
-        integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r"
-        crossorigin="anonymous"></script>
-</head>
 
 <body>
     <section class="container">
         <!-- inclusion de l'entête du site -->
         <?php require_once(__DIR__ . '/base/header.php'); ?>
 
-        <main class="page">
-            <div class="main">
-                <section class="recipes-container">
-                    <!-- tag container -->
-                    <div class="tags-container">
-                        <h4>Types de recettes</h4>
-                        <div class="tags-list">
-
-                            <?php foreach ($types as $type): ?>
-                                <button class="tag" data-type="<?= htmlspecialchars($type['type']); ?>">
-                                    <?= htmlspecialchars($type['type']); ?> (
-                                    <?= $type['count']; ?>)
-                                </button>
-                            <?php endforeach; ?>
-                        </div>
-                    </div>
-                    <!-- end of tag container -->
-                    <!-- recipes list -->
-                    <div class="recipes-list">
-                        <?php require_once(__DIR__ . '/application/filtres_recettes.php'); ?>
-                    </div>
-                    <!-- end of recipes list -->
-                </section>
-            </div>
-        </main>
+        <?php require_once(__DIR__ . '/application/content.php'); ?>
     </section>
     <!-- inclusion du bas de page du site -->
 
@@ -101,7 +53,27 @@ $userCourant = $_SESSION['LOGGED_USER'];
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
     <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('.like-btn').click(function () {
+                console.log("je suis la");
+                var recetteId = $(this).data('id');
 
+                $.ajax({
+                    url: '/application/toggle_like.php', // Le script PHP qui gérera le "like"
+                    type: 'POST',
+                    dataType: 'json', // Ajoutez cette ligne pour s'assurer que la réponse est traitée comme du JSON
+                    data: {
+                        'id_recette': recetteId,
+                        'id_user': <?php echo $_SESSION['LOGGED_USER']['id']; ?> // Supposons que l'ID de l'utilisateur est stocké dans $_SESSION['user_id']
+                    },
+                    success: function (result) { // La réponse est automatiquement parsée en tant qu'objet JSON
+                        $('.like-count[data-id="' + recetteId + '"]').text(result.newLikeCount); // Mise à jour du nombre de "likes"
+                    }
+                });
+            });
+        });
+    </script>
 
 </body>
 

@@ -9,37 +9,37 @@ require_once(__DIR__ . '/../configuration/databaseconnect.php');
 if (isset($_GET['id'])) {
 
     //var_dump($_GET['id']);
-    $recipe_id = $_GET['id'] ;
+    $recipe_id = $_GET['id'];
     //var_dump($recipe_id);
 
     // Utilisez $recipe_id pour récupérer les détails de la recette depuis la base de données et affichez-les
 }
 
 
-    $textsql = $mysqlClient->prepare("SELECT r.id AS id_recette,r.type AS type_recette, r.nom AS nom_recette, r.temps_preparation AS prep_recette, r.temps_cuisson AS cook_recette, r.instruction_cuisson AS cook_instruction, i.id AS id_ingredient, i.nom AS nom_ingredient, i.origine AS origine_ingredient, i.quantite AS quantite_ingredient FROM recette r INNER JOIN ingredients i ON r.id = i.id_recette WHERE r.id=:idd");
-    $textsql->bindParam(":idd", $recipe_id);
-    $textsql->execute();
-    $result = $textsql->fetchAll(PDO::FETCH_ASSOC);
+$textsql = $mysqlClient->prepare("SELECT r.id AS id_recette,r.type AS type_recette, r.nom AS nom_recette, r.temps_preparation AS prep_recette, r.temps_cuisson AS cook_recette, r.instruction_cuisson AS cook_instruction, i.id AS id_ingredient, i.nom AS nom_ingredient, i.origine AS origine_ingredient, i.quantite AS quantite_ingredient, i.photo AS photo FROM recette r INNER JOIN ingredients i ON r.id = i.id_recette WHERE r.id=:idd");
+$textsql->bindParam(":idd", $recipe_id);
+$textsql->execute();
+$result = $textsql->fetchAll(PDO::FETCH_ASSOC);
 
-    $commentaires = $mysqlClient->prepare("SELECT c.id AS id_commentaire, c.commentaire, c.heure, c.date, u.nom AS nom_utilisateur
+$commentaires = $mysqlClient->prepare("SELECT c.id AS id_commentaire, c.commentaire, c.heure, c.date, u.nom AS nom_utilisateur
     FROM recette r
     INNER JOIN commentaires c ON r.id = c.id_recette
     INNER JOIN users u ON c.id_users = u.id
     WHERE r.id = :idd");
-    $commentaires->bindParam(":idd", $recipe_id);
-    $commentaires->execute();
-    $commentaire = $commentaires->fetchAll(PDO::FETCH_ASSOC);
+$commentaires->bindParam(":idd", $recipe_id);
+$commentaires->execute();
+$commentaire = $commentaires->fetchAll(PDO::FETCH_ASSOC);
 
 
-    $recetteImageStatement = $mysqlClient->prepare("SELECT r.nom AS nom_recette, r.type AS type_recette, r.id AS id_recette, r.temps_preparation AS prep_recette, r.temps_cuisson AS cook_recette, i.nom AS nom_image, i.id AS id_image, i.lien AS lien_image
+$recetteImageStatement = $mysqlClient->prepare("SELECT r.nom AS nom_recette, r.type AS type_recette, r.id AS id_recette, r.temps_preparation AS prep_recette, r.temps_cuisson AS cook_recette, i.nom AS nom_image, i.id AS id_image, i.lien AS lien_image
     FROM recette r
     INNER JOIN photo i ON r.id = i.id_recette
     WHERE r.id = :idd");
-    $recetteImageStatement->bindParam(":idd", $recipe_id);
-    $recetteImageStatement->execute();
-    $recetteImages = $recetteImageStatement->fetchAll(PDO::FETCH_ASSOC);
+$recetteImageStatement->bindParam(":idd", $recipe_id);
+$recetteImageStatement->execute();
+$recetteImages = $recetteImageStatement->fetchAll(PDO::FETCH_ASSOC);
 
-   
+
 
 
 
@@ -51,6 +51,11 @@ if (isset($_GET['id'])) {
 
 //var_dump($recetteImages);
 
+$photoStatement2 = $mysqlClient->prepare('SELECT lien FROM photo WHERE id_recette = :id');
+$photoStatement2->execute([
+    'id' => $_GET['id'],
+]);
+$list = $photoStatement2->fetchAll();
 
 
 
@@ -66,15 +71,20 @@ require_once(__DIR__ . '/../base/link.php');
 <body class="d-flex flex-column min-vh-100">
     <div class="container">
         <!-- inclusion de l'entête du site -->
-        <?php require_once(__DIR__ . '/../base/header.php'); ?>
+        <?php require_once(__DIR__ . '/../base/header.php'); 
+        var_dump($result);?>
         <main class="page">
             <div class="recipe-page">
                 <section class="recipe-hero">
                     <?php
-                    echo '<img src="../' . $recetteImages[0]['lien_image'] . '/' . $recetteImages[0]['nom_recette'] . '.jpeg" class="img recipe-hero-img" alt="' . $recetteImages[0]['nom_recette'] . '" />'; ?>
+                    foreach ($list as $row) {
+                        echo '<img src="' . $row["lien"] . '" class="img recipe-img" alt="salut" />'
+                        ;
+                    } ?>
                     <article class="recipe-info">
                         <?php echo '<h2>' . $result[0]['nom_recette'] . '</h2>'; ?>
-                        <p> Cette recette est de type : <?php echo '<span>' . $result[0]['type_recette'] . '</span>'; ?>
+                        <p> Cette recette est de type :
+                            <?php echo '<span>' . $result[0]['type_recette'] . '</span>'; ?>
                             Shabby chic humblebrag banh mi bushwick, banjo kale chips
                             meggings. Cred selfies sartorial, cloud bread disrupt blue bottle
                             seitan. Dreamcatcher tousled bitters, health goth vegan venmo
@@ -109,8 +119,10 @@ require_once(__DIR__ . '/../base/link.php');
                         <div>
                             <!-- je veux affciher les commentaires ici -->
                             <h4>Commentaires</h4>
-                            <?php foreach ($commentaire as $comment) : ?>
-                                <p class="single-ingredient"><?php echo $comment['commentaire'] . ' ( A ' . $comment['heure'] . ' le ' . $comment['date'] . ' par ' .  $comment['nom_utilisateur'] . ' )'; ?></p>
+                            <?php foreach ($commentaire as $comment): ?>
+                                <p class="single-ingredient">
+                                    <?php echo $comment['commentaire'] . ' ( A ' . $comment['heure'] . ' le ' . $comment['date'] . ' par ' . $comment['nom_utilisateur'] . ' )'; ?>
+                                </p>
                             <?php endforeach; ?>
                             <h4>Ajouter un commentaire !</h4>
                             <form id="comment-form" action="/application/ajout_commentaire.php" method="POST">
@@ -119,19 +131,49 @@ require_once(__DIR__ . '/../base/link.php');
                                     <textarea class="form-control" id="comment" name="comment" rows="3"></textarea>
                                 </div>
                                 <input type="hidden" name="id_recette" value="<?php echo $_GET['id']; ?>">
+                                <br>
                                 <button type="submit" class="btn btn-primary">Envoyer</button>
+                                <?php
+                                $createur = getUserForRecette($mysqlClient, $_GET['id']);
+                                foreach ($createur as $c) {
+                                    if ($_SESSION['LOGGED_USER']['id'] == $c['id_users']) {
+                                        echo '<button type="submit" class="btn btn-danger">supprimer</button>';
+                                        break;
+                                    }
+                                } ?>
                             </form>
+
                         </div>
                     </article>
                     <article class="second-column">
                         <div>
                             <h4>Ingredients</h4>
-                            <?php foreach ($result as $row) : ?>
-                                <p class="single-ingredient"><?php echo $row['quantite_ingredient'] . ' ' . $row['nom_ingredient']; ?></p>
+                            <?php foreach ($result as $row): ?>
+                                <p class="single-ingredient row" style="display: block;">
+                                    <style>
+                                        .recipe-icon {
+                                            width: 24px;
+                                            /* Largeur de l'image */
+                                            height: 24px;
+                                            /* Hauteur de l'image */
+                                            object-fit: cover;
+                                            /* Assure que l'image couvre la zone sans perdre ses proportions */
+                                        }
+                                    </style>
+                                <div class="" style="width: 18rem;">
+                                    <ul class="list-group list-group-flush">
+                                        <li class="list-group-item">
+                                            <?php echo '<img src="' . $row["photo"] . '" class="img recipe-img recipe-icon " alt=""/>' ?>
+                                            <?php echo $row['quantite_ingredient'] . ' ' . $row['nom_ingredient']; ?>
+                                        </li>
+                                    </ul>
+                                </div>
+                                </p>
                             <?php endforeach; ?>
                         </div>
                         <div>
-                        <a href="./AjoutIngredient.php?id=<?php echo $_GET["id"];?>"><button type="button" class="btn btn-primary">Ajouter un ingredient</button></a>
+                            <a href="./AjoutIngredient.php?id=<?php echo $_GET["id"]; ?>"><button type="button"
+                                    class="btn btn-primary">Ajouter un ingredient</button></a>
                         </div>
                     </article>
 

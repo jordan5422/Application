@@ -4,8 +4,22 @@ require_once(__DIR__ . '/../configuration/databaseconnect.php');
 require_once(__DIR__ . '/../variables/functions.php');
 require_once(__DIR__ . '/../variables/variables.php');
 
+
 $errors = [];
-$errors = addIngredient($_POST, $mysqlClient, $_FILES);
+$photo = [];
+
+if (!empty($_POST)) {
+  $errors = validerDonnee($_POST);
+  $photo = verifPhoto($_FILES);
+  if (empty($errors) && empty($photoErrors['errors'])) {
+    $info = addIngredient($_POST, $mysqlClient, $photo["filePath"], $_GET['id']);
+
+  }
+}
+
+
+sessionMAJ(getAllUsers($mysqlClient));
+$userCourant = $_SESSION['LOGGED_USER'];
 
 ?>
 
@@ -42,8 +56,10 @@ require_once(__DIR__ . '/../base/link.php');
               <input type="text" name="quantite" id="quantite" class="form-input" required />
             </div>
             <div class="form-row">
-              <label for="photo" for="photo" class="form-label">Inserer Une Photo de l'Ingredient :</label>
-              <input type="file" name="photo" id="photo" class="form-input " accept="image/*" required />
+              <label for="screenshot" class="btn btn-outline-primary">
+                Nouvelle photo
+                <input type="file" name="screenshot" id="screenshot" class="account-settings-fileinput form-control">
+              </label> &nbsp;
             </div>
             <div class="form-row">
               <label for="message" class="form-label">Description de l'Ingredient</label>
