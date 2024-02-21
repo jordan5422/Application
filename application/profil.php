@@ -113,28 +113,32 @@ require_once(__DIR__ . '/../base/link.php');
                                 </div>
                                 <div class="tab-pane fade" id="account-social-links">
                                     <div class="card-body pb-2">
-                                        <div class="form-group">
-                                            <label class="form-label">Twitter</label>
-                                            <input type="text" class="form-control" value="https://twitter.com/user">
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="form-label">Facebook</label>
-                                            <input type="text" class="form-control"
-                                                value="https://www.facebook.com/user">
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="form-label">Google+</label>
-                                            <input type="text" class="form-control" value>
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="form-label">LinkedIn</label>
-                                            <input type="text" class="form-control" value>
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="form-label">Instagram</label>
-                                            <input type="text" class="form-control"
-                                                value="https://www.instagram.com/user">
-                                        </div>
+                                        <?php 
+                                        $recetteImagesql = $mysqlClient->prepare('SELECT *, photo.lien as lien FROM recette INNER JOIN photo ON recette.id = photo.id_recette WHERE recette.id_users = ?');
+                                        $recetteImagesql->execute([$_SESSION['LOGGED_USER']['id']]);
+                                        $recetteImagess = $recetteImagesql->fetchAll(PDO::FETCH_ASSOC);
+                                             
+                                         foreach($recetteImagess as $recetteImage){
+                                            echo '<div class="" style="width: 18rem;">';
+                                             echo '<div class="" style="width: 18rem;">';
+                                             echo '<div class="card-body">';
+                                             echo '<h5 class="card-title">';
+                                             echo '<a href="/application/content_unique.php?id=' . $recetteImage['id'] . '" class="recipe">';
+                                             echo '<img src="'.  $recetteImage['lien'].'" class="img recipe-img" alt="' . htmlspecialchars($recetteImage['nom']) . '" />';
+                                             echo '</a>';
+                                             echo '</h5>';
+                                             echo '<p class="card-text">';
+                                             echo '<a href="/application/content_unique.php?id=' . $recetteImage['id'] . '" class="recipe">';
+                                             echo '<h5>' . htmlspecialchars($recetteImage['nom']) . '</h5>';
+                                             echo '</a>';
+                                             echo '<p>Prep: ' . $recetteImage['temps_preparation'] . ' min | Cook: ' . $recetteImage['temps_cuisson'] . ' min</p>';
+                                             echo '</p>';
+                                             echo '<div class="recipe">';
+                                             echo '</div>';
+                                             echo '</div>';
+                                             echo '</div>';
+                                            }
+                                        ?>
                                     </div>
                                 </div>
                                 <div class="tab-pane fade" id="account-info">
